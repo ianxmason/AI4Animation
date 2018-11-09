@@ -1,26 +1,29 @@
+Few-shot Learning of Homogeneous Human Locomotion Styles
+======================================================
 The code for the paper Few-shot Learning of Homogeneous Human Locomotion Styles will be added to this repository in the near future.
 <!---
+To Do:
 
 In the data folder add the processing files both for the raw BVHs and the processed BVHs. Then clean up the motion folder. Need to look for this on backup hardrive.
 
-Redo the whole demo to be much better
+Redo the whole demo to be much better add all the necessary files.
 
-Download the processed data from this link and put in the Data folder
+Test all code and add trained parameters for the final model.
+
+Once added everything and tested need to pull it onto a new computer in which I am not signed it and try running it all.
+
+
+Write readme:
+
+Requires theano
+
+Download the processed data from this link and put in Models/Data. The code used for processing the raw BVHs is already provided in this folder for reference.
 https://drive.google.com/open?id=1nqbvzOM_VhlYlotPfsdEgrqQ6vIayHyK
 
 First train full models then the fewshot ones
 
-Consider adding trained parameters
-
-Requires Theano
-
-
 
 ###########################################################
-
-AI4Animation
-======================================================
-
 Description
 ------------
 This project explores the opportunities of deep learning and artificial intelligence for character animation and control as part of my Ph.D. research at the University of Edinburgh in the School of Informatics, supervised by <a href="http://homepages.inf.ed.ac.uk/tkomura">Taku Komura</a> and in collaboration with <a href="https://github.com/ShikamaruZhang">He Zhang</a> and <a href ="https://research.adobe.com/person/jun-saito">Jun Saito</a>. The development is done using Unity3D / Tensorflow, and the implementations are made available during my Ph.D. progress.
@@ -82,9 +85,6 @@ and store the parameters via the custom inspector button.<br /><br /><br />
 -
 </p>
 
-Motion Capture
-------------
-In progress.
 
 Copyright Information
 ------------

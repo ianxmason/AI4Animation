@@ -21,7 +21,7 @@ rng = np.random.RandomState(23456)
 
 """ Load Data """
 
-database = np.load('../Style_Data/style_database3.npz')
+database = np.load('../Data/style_database.npz')
 X_default = database['Xin']
 Y_default = database['Yin'].astype(theano.config.floatX)
 P_default = database['Pin'].astype(theano.config.floatX)
@@ -365,12 +365,12 @@ network = PhaseFunctionedNetwork(rng=rng, input_shape=X.shape[1]+1, output_shape
 """ Construct Trainer """
 
 batchsize = 32
-epochs = 100
 epochs = 25
 # epochs = 1 # Use this to check all folders are set up correctly before committing to full training
 trainer = AdamTrainer(rng=rng, batchsize=batchsize, epochs=epochs, alpha=0.0001)
 
 """ Split data into groups of size batch_size and organise the data so that we cycle through the styles """
+
 no_of_clips = np.sum(L_default, axis=0)[::w]   # no of non-mirrored clips in each style
 no_of_batches = no_of_clips//(batchsize//2)  # each batch is half mirrored and half not
 min_no_of_batches = int(min([np.floor(no_of_batches[i]) for i in xrange(len(no_of_batches)) if no_of_batches[i]!=0]))

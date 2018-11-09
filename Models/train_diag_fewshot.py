@@ -23,7 +23,7 @@ rng = np.random.RandomState(23456)
 
 """ Load Data """
 
-database = np.load('../Style_Data/fewshot_database3.npz')
+database = np.load('../Data/fewshot_database.npz')
 X_default = database['Xin'].astype(theano.config.floatX)
 Y_default = database['Yin'].astype(theano.config.floatX)
 P_default = database['Pin'].astype(theano.config.floatX)
@@ -75,6 +75,7 @@ X_mirror = (X_mirror - Xmean) / Xstd
 Y_mirror = (Y_mirror - Ymean) / Ystd
 
 """ Fewshot Styles List"""
+
 styletransfer_styles = [
     'Balance', 'BentForward', 'BentKnees', 'Bouncy', 'Cat', 'Chicken', 'Cool',
     'Crossover', 'Crouched', 'Dance3', 'Dinosaur', 'DragLeg', 'Drunk',
@@ -236,11 +237,11 @@ def save_network(network):
                 (y1))
 
         style_W0 = cubic(style_W0n[pindex_0], style_W0n[pindex_1], style_W0n[pindex_2], style_W0n[pindex_3], pamount)
-        fnameW0 = './Parameters/' + mname + '/Fewshot/1_1_dropout_time/' + network.style + ('_W0_%03i.bin' % i)        
+        fnameW0 = './Parameters/' + mname + '/Fewshot/' + network.style + ('_W0_%03i.bin' % i)        
         style_W0.astype(np.float32).tofile(fnameW0)
 
         style_b = cubic(style_bn[pindex_0], style_bn[pindex_1], style_bn[pindex_2], style_bn[pindex_3], pamount)
-        fnameb = './Parameters/' + mname + '/Fewshot/1_1_dropout_time/' + network.style + ('_b_%03i.bin' % i)        
+        fnameb = './Parameters/' + mname + '/Fewshot/' + network.style + ('_b_%03i.bin' % i)        
         style_b.astype(np.float32).tofile(fnameb)
         
 
@@ -251,20 +252,25 @@ no_of_clips_mirror = np.sum(L_mirror, axis=0)[::w]
 no_cumsum_default = np.insert(np.cumsum(no_of_clips_default),0,0)
 no_cumsum_mirror = np.insert(np.cumsum(no_of_clips_mirror),0,0)
 for i, style in enumerate(styletransfer_styles):
+
     """ Train on each Fewshot style individually """
+
     print "\n Training on style " + style + (" with %i non-mirrored clips" % int(no_of_clips_default[i]))
 
     batchsize = 32 # int(no_of_clips[i])
     epochs = 100
 
     """ Construct Network """
+
     print "Constructing Network..."
     network = PhaseFunctionedNetwork(rng=rng, input_shape=X.shape[1]+1, output_shape=Y.shape[1], dropout=1.0, dropout_res=1.0, style=style, batchsize=batchsize)
 
     """ Construct Trainer """    
+
     trainer = AdamTrainer(rng=rng, batchsize=batchsize, epochs=epochs, alpha=0.0001)
 
     """ Shuffle all data to avoid any problems caused by capturing similar motions together. """
+
     X_in_default = X_default[int(no_cumsum_default[i]):int(no_cumsum_default[i+1])]
     Y_in_default = Y_default[int(no_cumsum_default[i]):int(no_cumsum_default[i+1])]
     L_in_default = L_default[int(no_cumsum_default[i]):int(no_cumsum_default[i+1])]
@@ -324,7 +330,7 @@ for i, style in enumerate(styletransfer_styles):
     start=time.time()
     E = theano.shared(np.concatenate([X_in, P_in[...,np.newaxis]], axis=-1), borrow=True)
     F = theano.shared(Y_in, borrow=True)
-    trainer.train(network, E, F, filename='./Parameters/' + mname + '/Fewshot/1_1_dropout_time/fewshot_network.npz', restart=False, shuffle=False)
+    trainer.train(network, E, F, filename='./Parameters/' + mname + '/Fewshot/fewshot_network.npz', restart=False, shuffle=False)
     end=time.time()
     elapsed = np.array([end-start])
     print "Time to train style: " + style +": " + str(end-start)
@@ -332,6 +338,7 @@ for i, style in enumerate(styletransfer_styles):
     loss_dict[style] = trainer.train_losses
 
     """ Save Network """
+
     save_network(network)
 
 outfile = open('./Training_Stats/' + mname + '_nogait_fewshot_time','wb')

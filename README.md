@@ -1,5 +1,23 @@
 The code for the paper Few-shot Learning of Homogeneous Human Locomotion Styles will be added to this repository in the near future.
 <!---
+
+In the data folder add the processing files both for the raw BVHs and the processed BVHs. Then clean up the motion folder. Need to look for this on backup hardrive.
+
+Redo the whole demo to be much better
+
+Download the processed data from this link and put in the Data folder
+https://drive.google.com/open?id=1nqbvzOM_VhlYlotPfsdEgrqQ6vIayHyK
+
+First train full models then the fewshot ones
+
+Consider adding trained parameters
+
+Requires Theano
+
+
+
+###########################################################
+
 AI4Animation
 ======================================================
 

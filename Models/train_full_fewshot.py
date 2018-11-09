@@ -1,3 +1,7 @@
+""" 
+Few-shot training of the residual adapters with a full matrix of weights for each style.
+"""
+
 import sys
 import numpy as np
 import theano
@@ -5,21 +9,17 @@ import theano.tensor as T
 import time
 import pickle
 theano.config.allow_gc = True
-
 sys.path.append('./nn')
-
 from Layer import Layer
 from HiddenLayer import HiddenLayer
 from BiasLayer import BiasLayer
 from DropoutLayer import DropoutLayer
 from ActivationLayer import ActivationLayer
-# from AdamTrainerStyle import AdamTrainer
 from AdamTrainer import AdamTrainer
 from DiagLayer import DiagLayer
 
+mname='Full'
 rng = np.random.RandomState(23456)
-
-""" This file is for the fewshot training for the CP decompostion with a central diagonal tensor of size 30x30. Variable Dropout."""
 
 """ Load Data """
 
@@ -62,10 +62,10 @@ joint_weights = np.array([
 
 """ Load Mean / Std / Min / Max """
 
-Xmean = np.fromfile('./Parameters/final_nondiag_res/Xmean.bin', dtype=np.float32)
-Ymean = np.fromfile('./Parameters/final_nondiag_res/Ymean.bin', dtype=np.float32)
-Xstd = np.fromfile('./Parameters/final_nondiag_res/Xstd.bin', dtype=np.float32)
-Ystd = np.fromfile('./Parameters/final_nondiag_res/Ystd.bin', dtype=np.float32)
+Xmean = np.fromfile('./Parameters/' + mname + '/Xmean.bin', dtype=np.float32)
+Ymean = np.fromfile('./Parameters/' + mname + '/Ymean.bin', dtype=np.float32)
+Xstd = np.fromfile('./Parameters/' + mname + '/Xstd.bin', dtype=np.float32)
+Ystd = np.fromfile('./Parameters/' + mname + '/Ystd.bin', dtype=np.float32)
 
 """ Normalise by precalculated mean and std """
 
@@ -111,13 +111,13 @@ class PhaseFunctionedNetwork(Layer):
         b2_load = np.empty((self.nslices, output_shape), dtype=np.float32)
 
         for i in range(4): 
-            W0_load[i] = np.fromfile('./Parameters/final_nondiag_res/W0_%03i.bin' % (int)(i * 12.5), dtype=np.float32).reshape(512, input_shape-1)
-            W1_load[i] = np.fromfile('./Parameters/final_nondiag_res/W1_%03i.bin' % (int)(i * 12.5), dtype=np.float32).reshape(512, 512)
-            W2_load[i] = np.fromfile('./Parameters/final_nondiag_res/W2_%03i.bin' % (int)(i * 12.5), dtype=np.float32).reshape(output_shape, 512)
+            W0_load[i] = np.fromfile('./Parameters/' + mname + '/W0_%03i.bin' % (int)(i * 12.5), dtype=np.float32).reshape(512, input_shape-1)
+            W1_load[i] = np.fromfile('./Parameters/' + mname + '/W1_%03i.bin' % (int)(i * 12.5), dtype=np.float32).reshape(512, 512)
+            W2_load[i] = np.fromfile('./Parameters/' + mname + '/W2_%03i.bin' % (int)(i * 12.5), dtype=np.float32).reshape(output_shape, 512)
 
-            b0_load[i] = np.fromfile('./Parameters/final_nondiag_res/b0_%03i.bin' % (int)(i * 12.5), dtype=np.float32)
-            b1_load[i] = np.fromfile('./Parameters/final_nondiag_res/b1_%03i.bin' % (int)(i * 12.5), dtype=np.float32)
-            b2_load[i] = np.fromfile('./Parameters/final_nondiag_res/b2_%03i.bin' % (int)(i * 12.5), dtype=np.float32)
+            b0_load[i] = np.fromfile('./Parameters/' + mname + '/b0_%03i.bin' % (int)(i * 12.5), dtype=np.float32)
+            b1_load[i] = np.fromfile('./Parameters/' + mname + '/b1_%03i.bin' % (int)(i * 12.5), dtype=np.float32)
+            b2_load[i] = np.fromfile('./Parameters/' + mname + '/b2_%03i.bin' % (int)(i * 12.5), dtype=np.float32)
 
         self.W0 = HiddenLayer((self.nslices, 512, input_shape-1), rng=rng, gamma=0.01)
         self.W1 = HiddenLayer((self.nslices, 512, 512), rng=rng, gamma=0.01)
@@ -149,7 +149,6 @@ class PhaseFunctionedNetwork(Layer):
         zeros = np.zeros((1, output_shape))
         self.zeros = T.addbroadcast(theano.shared(zeros, borrow=True), 0)
         
-    # def __call__(self, input, label):
     def __call__(self, input):
         
         pscale = self.nslices * input[:,-1]
@@ -235,11 +234,11 @@ def save_network(network):
                 (y1))
 
         style_W0 = cubic(style_W0n[pindex_0], style_W0n[pindex_1], style_W0n[pindex_2], style_W0n[pindex_3], pamount)
-        fnameW0 = './Parameters/final_nondiag_res/Fewshot/05_05_dropout_time/' + network.style + ('_W0_%03i.bin' % i)        
+        fnameW0 = './Parameters/' + mname + '/Fewshot/05_05_dropout_time/' + network.style + ('_W0_%03i.bin' % i)        
         style_W0.astype(np.float32).tofile(fnameW0)
 
         style_b = cubic(style_bn[pindex_0], style_bn[pindex_1], style_bn[pindex_2], style_bn[pindex_3], pamount)
-        fnameb = './Parameters/final_nondiag_res/Fewshot/05_05_dropout_time/' + network.style + ('_b_%03i.bin' % i)        
+        fnameb = './Parameters/' + mname + '/Fewshot/05_05_dropout_time/' + network.style + ('_b_%03i.bin' % i)        
         style_b.astype(np.float32).tofile(fnameb)
         
 time_dict = {}    
@@ -322,7 +321,7 @@ for i, style in enumerate(styletransfer_styles):
     start=time.time()
     E = theano.shared(np.concatenate([X_in, P_in[...,np.newaxis]], axis=-1), borrow=True)
     F = theano.shared(Y_in, borrow=True)
-    trainer.train(network, E, F, filename='./Parameters/final_nondiag_res/Fewshot/05_05_dropout_time/fewshot_network.npz', restart=False, shuffle=False)
+    trainer.train(network, E, F, filename='./Parameters/' + mname + '/Fewshot/05_05_dropout_time/fewshot_network.npz', restart=False, shuffle=False)
     end=time.time()
     elapsed = np.array([end-start])
     print "Time to train style: " + style +": " + str(end-start)
@@ -332,7 +331,7 @@ for i, style in enumerate(styletransfer_styles):
     """ Save Network """
     save_network(network)
 
-outfile = open('./Training_Stats/final_nondiag_res_nogait_fewshot_time','wb')
+outfile = open('./Training_Stats/' + mname + '_time','wb')
 pickle.dump(time_dict, outfile)
 outfile.close()
 

@@ -1,12 +1,14 @@
+""" 
+Training the main pfnn with residual adapters decomposed using CP decomposition and with the central diagonal tensor of size 30x30.
+"""
+
 import sys
 import numpy as np
 import theano
 import theano.tensor as T
 import time
 theano.config.allow_gc = True
-
 sys.path.append('./nn')
-
 from Layer import Layer
 from HiddenLayer import HiddenLayer
 from BiasLayer import BiasLayer
@@ -15,9 +17,8 @@ from ActivationLayer import ActivationLayer
 from AdamTrainerStyle import AdamTrainer
 from DiagLayer import DiagLayer
 
+mname='CP'
 rng = np.random.RandomState(23456)
-
-""" This file is for the pfnn with residual adapters factorised using parafac with the central diagonal tensor of size 30x30."""
 
 """ Load Data """
 
@@ -52,23 +53,10 @@ print(X.shape, Y.shape, L.shape, P.shape)
 Xmean, Xstd = X.mean(axis=0), X.std(axis=0)
 Ymean, Ystd = Y.mean(axis=0), Y.std(axis=0)
 
-# Xstd[w*0:(w*0+(w*1)//2)] = np.hstack((Xstd[w*0:(w*0+(w*1)//2)], Xstd[w*1:(w*1+(w*1)//2)])).mean() # Trajectory Past Positions
-# Xstd[w*1:(w*1+(w*1)//2)] = np.hstack((Xstd[w*0:(w*0+(w*1)//2)], Xstd[w*1:(w*1+(w*1)//2)])).mean() # Trajectory Past Positions
-# Xstd[(w*0+(w*1)//2):w*1] = np.hstack((Xstd[(w*0+(w*1)//2):w*1], Xstd[(w*1+(w*1)//2):w*2])).mean() # Trajectory Future Positions
-# Xstd[(w*1+(w*1)//2):w*2] = np.hstack((Xstd[(w*0+(w*1)//2):w*1], Xstd[(w*1+(w*1)//2):w*2])).mean() # Trajectory Future Positions
-
-# Xstd[w*2:(w*2+(w*1)//2)] = np.hstack((Xstd[w*2:(w*2+(w*1)//2)], Xstd[w*3:(w*3+(w*1)//2)])).mean() # Trajectory Past Directions
-# Xstd[w*3:(w*3+(w*1)//2)] = np.hstack((Xstd[w*2:(w*2+(w*1)//2)], Xstd[w*3:(w*3+(w*1)//2)])).mean() # Trajectory Past Directions
-# Xstd[(w*2+(w*1)//2):w*3] = np.hstack((Xstd[(w*2+(w*1)//2):w*3], Xstd[(w*3+(w*1)//2):w*4])).mean() # Trajectory Future Directions
-# Xstd[(w*3+(w*1)//2):w*4] = np.hstack((Xstd[(w*2+(w*1)//2):w*3], Xstd[(w*3+(w*1)//2):w*4])).mean() # Trajectory Future Directions
-
-# Xstd[w*4:w*6] = Xstd[w*4:w*6].mean()   # Gait Labels are Unused
-
 Xstd[w*0:w*1] = Xstd[w*0:w*1].mean() # Trajectory X Positions
 Xstd[w*1:w*2] = Xstd[w*1:w*2].mean() # Trajectory Z Positions
 Xstd[w*2:w*3] = Xstd[w*2:w*3].mean() # Trajectory X Directions
 Xstd[w*3:w*4] = Xstd[w*3:w*4].mean() # Trajectory Z Directions
-# Xstd[w*4:w*6] = Xstd[w*4:w*6].mean()   # Trajectory Gait
 
 """ Mask Out Unused Joints in Input """
 
@@ -99,10 +87,10 @@ Ystd[4+w*2+j*3*3:4+w*2+j*3*4] = Ystd[4+w*2+j*3*3:4+w*2+j*3*4].mean() # Up Rot
 
 """ Save Mean / Std / Min / Max """
 
-Xmean.astype(np.float32).tofile('./Parameters/final_parafac_30_nogait/Xmean.bin')
-Ymean.astype(np.float32).tofile('./Parameters/final_parafac_30_nogait/Ymean.bin')
-Xstd.astype(np.float32).tofile('./Parameters/final_parafac_30_nogait/Xstd.bin')
-Ystd.astype(np.float32).tofile('./Parameters/final_parafac_30_nogait/Ystd.bin')
+Xmean.astype(np.float32).tofile('./Parameters/' + mname + '/Xmean.bin')
+Ymean.astype(np.float32).tofile('./Parameters/' + mname + '/Ymean.bin')
+Xstd.astype(np.float32).tofile('./Parameters/' + mname + '/Xstd.bin')
+Ystd.astype(np.float32).tofile('./Parameters/' + mname + '/Ystd.bin')
 
 """ Normalize Data """
 
@@ -394,13 +382,13 @@ def save_network(network):
         b1 = cubic(b1n[pindex_0], b1n[pindex_1], b1n[pindex_2], b1n[pindex_3], pamount)
         b2 = cubic(b2n[pindex_0], b2n[pindex_1], b2n[pindex_2], b2n[pindex_3], pamount)
         
-        W0.astype(np.float32).tofile('./Parameters/final_parafac_30_nogait/W0_%03i.bin' % i)
-        W1.astype(np.float32).tofile('./Parameters/final_parafac_30_nogait/W1_%03i.bin' % i)
-        W2.astype(np.float32).tofile('./Parameters/final_parafac_30_nogait/W2_%03i.bin' % i)
+        W0.astype(np.float32).tofile('./Parameters/' + mname + '/W0_%03i.bin' % i)
+        W1.astype(np.float32).tofile('./Parameters/' + mname + '/W1_%03i.bin' % i)
+        W2.astype(np.float32).tofile('./Parameters/' + mname + '/W2_%03i.bin' % i)
         
-        b0.astype(np.float32).tofile('./Parameters/final_parafac_30_nogait/b0_%03i.bin' % i)
-        b1.astype(np.float32).tofile('./Parameters/final_parafac_30_nogait/b1_%03i.bin' % i)
-        b2.astype(np.float32).tofile('./Parameters/final_parafac_30_nogait/b2_%03i.bin' % i)
+        b0.astype(np.float32).tofile('./Parameters/' + mname + '/b0_%03i.bin' % i)
+        b1.astype(np.float32).tofile('./Parameters/' + mname + '/b1_%03i.bin' % i)
+        b2.astype(np.float32).tofile('./Parameters/' + mname + '/b2_%03i.bin' % i)
 
         ang_W1 = cubic(ang_W1n[pindex_0], ang_W1n[pindex_1], ang_W1n[pindex_2], ang_W1n[pindex_3], pamount)
         chi_W1 = cubic(chi_W1n[pindex_0], chi_W1n[pindex_1], chi_W1n[pindex_2], chi_W1n[pindex_3], pamount)
@@ -411,41 +399,41 @@ def save_network(network):
         sex_W1 = cubic(sex_W1n[pindex_0], sex_W1n[pindex_1], sex_W1n[pindex_2], sex_W1n[pindex_3], pamount)
         str_W1 = cubic(str_W1n[pindex_0], str_W1n[pindex_1], str_W1n[pindex_2], str_W1n[pindex_3], pamount)
 
-        ang_W1.astype(np.float32).tofile('./Parameters/final_parafac_30_nogait/ang_W1_%03i.bin' % i)
-        chi_W1.astype(np.float32).tofile('./Parameters/final_parafac_30_nogait/chi_W1_%03i.bin' % i)
-        dep_W1.astype(np.float32).tofile('./Parameters/final_parafac_30_nogait/dep_W1_%03i.bin' % i)
-        neu_W1.astype(np.float32).tofile('./Parameters/final_parafac_30_nogait/neu_W1_%03i.bin' % i)
-        old_W1.astype(np.float32).tofile('./Parameters/final_parafac_30_nogait/old_W1_%03i.bin' % i)
-        pro_W1.astype(np.float32).tofile('./Parameters/final_parafac_30_nogait/pro_W1_%03i.bin' % i)
-        sex_W1.astype(np.float32).tofile('./Parameters/final_parafac_30_nogait/sex_W1_%03i.bin' % i)
-        str_W1.astype(np.float32).tofile('./Parameters/final_parafac_30_nogait/str_W1_%03i.bin' % i)
+        ang_W1.astype(np.float32).tofile('./Parameters/' + mname + '/ang_W1_%03i.bin' % i)
+        chi_W1.astype(np.float32).tofile('./Parameters/' + mname + '/chi_W1_%03i.bin' % i)
+        dep_W1.astype(np.float32).tofile('./Parameters/' + mname + '/dep_W1_%03i.bin' % i)
+        neu_W1.astype(np.float32).tofile('./Parameters/' + mname + '/neu_W1_%03i.bin' % i)
+        old_W1.astype(np.float32).tofile('./Parameters/' + mname + '/old_W1_%03i.bin' % i)
+        pro_W1.astype(np.float32).tofile('./Parameters/' + mname + '/pro_W1_%03i.bin' % i)
+        sex_W1.astype(np.float32).tofile('./Parameters/' + mname + '/sex_W1_%03i.bin' % i)
+        str_W1.astype(np.float32).tofile('./Parameters/' + mname + '/str_W1_%03i.bin' % i)
 
-    ang_W0[0].astype(np.float32).tofile('./Parameters/final_parafac_30_nogait/ang_W0.bin')
-    chi_W0[0].astype(np.float32).tofile('./Parameters/final_parafac_30_nogait/chi_W0.bin')
-    dep_W0[0].astype(np.float32).tofile('./Parameters/final_parafac_30_nogait/dep_W0.bin')
-    neu_W0[0].astype(np.float32).tofile('./Parameters/final_parafac_30_nogait/neu_W0.bin')
-    old_W0[0].astype(np.float32).tofile('./Parameters/final_parafac_30_nogait/old_W0.bin')
-    pro_W0[0].astype(np.float32).tofile('./Parameters/final_parafac_30_nogait/pro_W0.bin')
-    sex_W0[0].astype(np.float32).tofile('./Parameters/final_parafac_30_nogait/sex_W0.bin')
-    str_W0[0].astype(np.float32).tofile('./Parameters/final_parafac_30_nogait/str_W0.bin')
+    ang_W0[0].astype(np.float32).tofile('./Parameters/' + mname + '/ang_W0.bin')
+    chi_W0[0].astype(np.float32).tofile('./Parameters/' + mname + '/chi_W0.bin')
+    dep_W0[0].astype(np.float32).tofile('./Parameters/' + mname + '/dep_W0.bin')
+    neu_W0[0].astype(np.float32).tofile('./Parameters/' + mname + '/neu_W0.bin')
+    old_W0[0].astype(np.float32).tofile('./Parameters/' + mname + '/old_W0.bin')
+    pro_W0[0].astype(np.float32).tofile('./Parameters/' + mname + '/pro_W0.bin')
+    sex_W0[0].astype(np.float32).tofile('./Parameters/' + mname + '/sex_W0.bin')
+    str_W0[0].astype(np.float32).tofile('./Parameters/' + mname + '/str_W0.bin')
 
-    ang_W2[0].astype(np.float32).tofile('./Parameters/final_parafac_30_nogait/ang_W2.bin')
-    chi_W2[0].astype(np.float32).tofile('./Parameters/final_parafac_30_nogait/chi_W2.bin')
-    dep_W2[0].astype(np.float32).tofile('./Parameters/final_parafac_30_nogait/dep_W2.bin')
-    neu_W2[0].astype(np.float32).tofile('./Parameters/final_parafac_30_nogait/neu_W2.bin')
-    old_W2[0].astype(np.float32).tofile('./Parameters/final_parafac_30_nogait/old_W2.bin')
-    pro_W2[0].astype(np.float32).tofile('./Parameters/final_parafac_30_nogait/pro_W2.bin')
-    sex_W2[0].astype(np.float32).tofile('./Parameters/final_parafac_30_nogait/sex_W2.bin')
-    str_W2[0].astype(np.float32).tofile('./Parameters/final_parafac_30_nogait/str_W2.bin')
+    ang_W2[0].astype(np.float32).tofile('./Parameters/' + mname + '/ang_W2.bin')
+    chi_W2[0].astype(np.float32).tofile('./Parameters/' + mname + '/chi_W2.bin')
+    dep_W2[0].astype(np.float32).tofile('./Parameters/' + mname + '/dep_W2.bin')
+    neu_W2[0].astype(np.float32).tofile('./Parameters/' + mname + '/neu_W2.bin')
+    old_W2[0].astype(np.float32).tofile('./Parameters/' + mname + '/old_W2.bin')
+    pro_W2[0].astype(np.float32).tofile('./Parameters/' + mname + '/pro_W2.bin')
+    sex_W2[0].astype(np.float32).tofile('./Parameters/' + mname + '/sex_W2.bin')
+    str_W2[0].astype(np.float32).tofile('./Parameters/' + mname + '/str_W2.bin')
 
-    ang_b[0].astype(np.float32).tofile('./Parameters/final_parafac_30_nogait/ang_b.bin')
-    chi_b[0].astype(np.float32).tofile('./Parameters/final_parafac_30_nogait/chi_b.bin')
-    dep_b[0].astype(np.float32).tofile('./Parameters/final_parafac_30_nogait/dep_b.bin')
-    neu_b[0].astype(np.float32).tofile('./Parameters/final_parafac_30_nogait/neu_b.bin')
-    old_b[0].astype(np.float32).tofile('./Parameters/final_parafac_30_nogait/old_b.bin')
-    pro_b[0].astype(np.float32).tofile('./Parameters/final_parafac_30_nogait/pro_b.bin')
-    sex_b[0].astype(np.float32).tofile('./Parameters/final_parafac_30_nogait/sex_b.bin')
-    str_b[0].astype(np.float32).tofile('./Parameters/final_parafac_30_nogait/str_b.bin')
+    ang_b[0].astype(np.float32).tofile('./Parameters/' + mname + '/ang_b.bin')
+    chi_b[0].astype(np.float32).tofile('./Parameters/' + mname + '/chi_b.bin')
+    dep_b[0].astype(np.float32).tofile('./Parameters/' + mname + '/dep_b.bin')
+    neu_b[0].astype(np.float32).tofile('./Parameters/' + mname + '/neu_b.bin')
+    old_b[0].astype(np.float32).tofile('./Parameters/' + mname + '/old_b.bin')
+    pro_b[0].astype(np.float32).tofile('./Parameters/' + mname + '/pro_b.bin')
+    sex_b[0].astype(np.float32).tofile('./Parameters/' + mname + '/sex_b.bin')
+    str_b[0].astype(np.float32).tofile('./Parameters/' + mname + '/str_b.bin')
         
 """ Construct Network """
 
@@ -539,13 +527,13 @@ start=time.time()
 E = theano.shared(np.concatenate([X_in, P_in[...,np.newaxis]], axis=-1), borrow=True)
 F = theano.shared(Y_in, borrow=True)
 G = theano.shared(L_in, borrow=True)
-trainer.train(network, E, F, G, filename='./Parameters/final_parafac_30_nogait/network.npz', restart=False, shuffle=False)
+trainer.train(network, E, F, G, filename='./Parameters/' + mname + '/network.npz', restart=False, shuffle=False)
 end=time.time()
 elapsed = np.array([end-start])   
 
 """ Save Network """
 
 save_network(network)
-np.savez_compressed('./Training_Stats/final_parafac_30_nogait_stats.npz', n_epochs=trainer.total_epochs[1:], train_loss=trainer.train_losses[1:], time=elapsed)
+np.savez_compressed('./Training_Stats/' + mname + '_stats.npz', n_epochs=trainer.total_epochs[1:], train_loss=trainer.train_losses[1:], time=elapsed)
 
 

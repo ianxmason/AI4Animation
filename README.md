@@ -22,6 +22,7 @@ https://drive.google.com/open?id=1nqbvzOM_VhlYlotPfsdEgrqQ6vIayHyK
 
 First train full models then the fewshot ones
 
+On the github say, as we say in the paper this is not highly engineered and results can probably be improved. Also say we fork an old version of ai4animation and link it. Add bibtex readme. (This is similar to the blog and requires same images as poster and presentation.)
 
 ###########################################################
 Description

@@ -23,7 +23,7 @@ rng = np.random.RandomState(23456)
 
 """ Load Data """
 
-database = np.load('../Data/fewshot_database.npz')
+database = np.load('./Data/fewshot_database.npz')
 X_default = database['Xin'].astype(theano.config.floatX)
 Y_default = database['Yin'].astype(theano.config.floatX)
 P_default = database['Pin'].astype(theano.config.floatX)
@@ -39,15 +39,10 @@ L_mirror = np.copy(X_mirror[:,w*6:w*56]).astype(theano.config.floatX)
 X_default = np.concatenate((X_default[:,w*0:w*4], X_default[:,w*56:]), axis=1).astype(theano.config.floatX)
 X_mirror = np.concatenate((X_mirror[:,w*0:w*4], X_mirror[:,w*56:]), axis=1).astype(theano.config.floatX)
 
-print(X_default.shape, Y_default.shape, L_default.shape, P_default.shape)
-print(X_mirror.shape, Y_mirror.shape, L_mirror.shape, P_mirror.shape)
-
 X = np.concatenate((X_default, X_mirror), axis=0)
 Y = np.concatenate((Y_default, Y_mirror), axis=0)
 P = np.concatenate((P_default, P_mirror), axis=0)
 L = np.concatenate((L_default, L_mirror), axis=0)
-
-print(X.shape, Y.shape, L.shape, P.shape)
 
 """ Mask Out Unused Joints in Input """
 

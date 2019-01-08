@@ -12,90 +12,48 @@ Check all comments in every code file
 
 Once added everything and tested need to pull it onto a new computer in which I am not signed in and try running it all.
 
+Add licence
+
+Add link from ianxmason.github.io to this repo
 
 Write readme:
 
-Requires theano
-
-Large parts of this code are built from Holden (Cite & Link to Code) and Starke (Cite & Link to Code)
-
-
-Download the processed data from this link and put in Models/Data. The scripts in the Data_Processing_Scripts file were used to create this data from the raw BVH files, they are not needed to run this code but provided for completion.
-https://drive.google.com/open?id=1nqbvzOM_VhlYlotPfsdEgrqQ6vIayHyK
-
-First train full models then the fewshot ones
-Or Download Pre-trained Parameters
-
-You can read the full paper here (my website) 
-Citation [bibtex link]:
-Give citation in tex
-
-On the github say, as we say in the paper this is not highly engineered and results can probably be improved. Also say we fork an old version of ai4animation and link it. Add bibtex readme. (This is similar to the blog and requires same images as poster and presentation.)
-
-###########################################################
-Description
+About
 ------------
-This project explores the opportunities of deep learning and artificial intelligence for character animation and control as part of my Ph.D. research at the University of Edinburgh in the School of Informatics, supervised by <a href="http://homepages.inf.ed.ac.uk/tkomura">Taku Komura</a> and in collaboration with <a href="https://github.com/ShikamaruZhang">He Zhang</a> and <a href ="https://research.adobe.com/person/jun-saito">Jun Saito</a>. The development is done using Unity3D / Tensorflow, and the implementations are made available during my Ph.D. progress.
+<img src ="https://github.com/ianxmason/Fewshot_Learning_of_Homogeneous_Human_Locomotion_Styles/blob/master/Media/system.png" width="100%">
 
-SIGGRAPH 2018
+This github repository provides the accompanying code for the paper <a href="https://ianxmason.github.io/papers/fewshot_style.pdf" target="_blank">Few-shot Learning of Homogeneous Human Locomotion Styles</a>, winner of the Best Student Paper Award at Pacific Graphics 2018. You can read more about our work and view the accompanying video <a href="https://ianxmason.github.io/posts/fewshot-style/" target="_blank">here</a>.
+
+Large parts of this code are built from the Phase-Functioned Neural Network by Holden et al. (<a href="http://theorangeduck.com/media/uploads/other_stuff/phasefunction.pdf" target="_blank">Paper</a> & <a href="http://theorangeduck.com/page/phase-functioned-neural-networks-character-control" target="_blank">Code</a>) and the Mode Adaptive Neural Network by Zhang & Starke et al. (<a href="http://homepages.inf.ed.ac.uk/tkomura/dog.pdf" target="_blank">Paper</a> & <a href="https://github.com/sebastianstarke/AI4Animation" target="_blank">Code</a>).
+
+As discussed in the paper our solution is not highly engineered and we suspect the results can be qualitatively improved with further engineering such as finding the optimal size of CP decomposition tensors or the ideal point for early stopping. 
+
+Training the models requires Python 2.7 with Theano & Numpy. Experimenting with the demo requires Unity3D.
+
+Training the Models
 ------------
-<img src ="https://github.com/sebastianstarke/AI4Animation/blob/master/Media/SIGGRAPH_2018/Teaser.png" width="100%">
-<img align="left" src ="https://github.com/sebastianstarke/AI4Animation/blob/master/Media/SIGGRAPH_2018/Terrain.png" width="35%">
-Animating characters can be a pain, especially those four-legged monsters!
-This year, we will be presenting our recent research on quadruped animation and character control at the SIGGRAPH 2018 in Vancouver.
-The system can produce natural animations from real motion data using a novel neural network architecture, called Mode-Adaptive Neural Networks.
-Instead of optimising a fixed group of weights, the system learns to dynamically blend a group of weights into a further neural network, based on the current
-state of the character. That said, the system does not require labels for the phase or locomotion gaits, but can learn from unstructured motion capture data in an
-end-to-end fashion.<br /><br /><br />
+Pre-trained parameters can be found in Models/Parameters/CP, if you wish to train from scratch follow the below process:
 
-<p align="center">
--
-<a href="https://www.youtube.com/watch?v=uFJvRYtjQ4c">Video</a>
--
-<a href="https://github.com/sebastianstarke/AI4Animation//blob/master/Media/SIGGRAPH_2018/Paper.pdf">Paper</a>
--
-<a href="http://www.starke-consult.de/UoE/GitHub/SIGGRAPH_2018/Demo_Windows.zip">Windows Demo</a>
--
-<a href="http://www.starke-consult.de/UoE/GitHub/SIGGRAPH_2018/Demo_Linux.zip">Linux Demo</a>
--
-<a href="http://www.starke-consult.de/UoE/GitHub/SIGGRAPH_2018/Demo_Mac.zip">Mac Demo</a>
--
-<a href="https://github.com/sebastianstarke/AI4Animation/blob/master/AI4Animation/Assets/Demo/SIGGRAPH_2018/ReadMe.txt">ReadMe</a>
--
-</p>
+First, download the <a href="https://drive.google.com/open?id=1nqbvzOM_VhlYlotPfsdEgrqQ6vIayHyK" target="_blank">processed data</a> and put the npz files in the Models/Data directory. The scripts in the Data_Processing_Scripts file were used to create this data from the raw BVH files, they are not needed to run this code but provided for completion.
 
-<p align="center">
-<a href="https://www.youtube.com/watch?v=uFJvRYtjQ4c">
-<img width="60%" src="https://img.youtube.com/vi/uFJvRYtjQ4c/0.jpg">
-</a>
-</p>
+Then train the main network: train_cp.py trains the main network with CP decomposed residual adapters
 
-SIGGRAPH 2017
+Followed by the the fewshot network: train_cp_fewshot.py
+
+We also provide code for training comparisons, but not pre-trained parameters
+train_diag & train_diag_fewshot - trains with the residual adpaters having only diagonal weights
+train_full & train_full_fewshot - trains with full weight matrices for the residual adapters
+
+Running the Demo
 ------------
-<img src ="https://github.com/sebastianstarke/AI4Animation/blob/master/Media/SIGGRAPH_2017/Adam.png" width="100%">
-<img align="left" src ="https://github.com/sebastianstarke/AI4Animation/blob/master/Media/SIGGRAPH_2017/Original.png" width="45%">
-This work continues the recent work on PFNN (Phase-Functioned Neural Networks) for character control.
-A demo in Unity3D using the original weights for terrain-adaptive locomotion is contained in the Assets/Demo/SIGGRAPH_2017/Original folder.
-Another demo on flat ground using the Adam character is contained in the Assets/Demo/SIGGRAPH_2017/Adam folder.
-In order to run them, you need to download the neural network weights from the link provided in the Link.txt file, extract them into the /NN folder, 
-and store the parameters via the custom inspector button.<br /><br /><br />
+<img src ="https://github.com/ianxmason/Fewshot_Learning_of_Homogeneous_Human_Locomotion_Styles/blob/master/Media/examples.png" width="100%">
 
-<p align="center">
--
-<a href="https://www.youtube.com/watch?v=Ul0Gilv5wvY">Video</a>
--
-<a href="http://theorangeduck.com/media/uploads/other_stuff/phasefunction.pdf">Paper</a>
--
-<a href="http://www.starke-consult.de/UoE/GitHub/SIGGRAPH_2017/Demo_Windows.zip">Windows Demo</a>
--
-<a href="http://www.starke-consult.de/UoE/GitHub/SIGGRAPH_2017/Demo_Linux.zip">Linux Demo</a>
--
-<a href="http://www.starke-consult.de/UoE/GitHub/SIGGRAPH_2017/Demo_Mac.zip">Mac Demo</a>
--
-</p>
+The demo is built in Unity
+MORE EXPLANATION
 
-
-Copyright Information
+Citation
 ------------
-This code implementation is only for research or education purposes, and (especially the learned data) not freely available for commercial use or redistribution. The intellectual property and code implementation belongs to the University of Edinburgh. Licensing is possible if you want to apply this research for commercial use. For scientific use, please reference this repository together with the relevant publications below. In any case, I would ask you to contact me if you intend to seriously use, redistribute or publish anything related to this code or repository.
---->
+If you wish to use this code or data for your own research please cite the following [<a href="https://ianxmason.github.io/bibtex/fewshot_style.txt" target="_blank">bibtex</a>]:
+Few-shot learning of homogeneous human locomotion styles,
+Ian Mason, Sebastian Starke, He Zhang, Hakan Bilen and Taku Komura,
+Computer Graphics Forum, Volume 37, Number 7, Pages 143-153, 2018.

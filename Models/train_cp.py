@@ -22,7 +22,7 @@ rng = np.random.RandomState(23456)
 
 """ Load Data """
 
-database = np.load('../Data/style_database.npz')
+database = np.load('./Data/style_database.npz')
 X_default = database['Xin']
 Y_default = database['Yin'].astype(theano.config.floatX)
 P_default = database['Pin'].astype(theano.config.floatX)
@@ -38,15 +38,10 @@ L_mirror = np.copy(X_mirror[:,w*6:w*14]).astype(theano.config.floatX)
 X_default = np.concatenate((X_default[:,w*0:w*4], X_default[:,w*14:]), axis=1).astype(theano.config.floatX)
 X_mirror = np.concatenate((X_mirror[:,w*0:w*4], X_mirror[:,w*14:]), axis=1).astype(theano.config.floatX)
 
-print(X_default.shape, Y_default.shape, L_default.shape, P_default.shape)
-print(X_mirror.shape, Y_mirror.shape, L_mirror.shape, P_mirror.shape)
-
 X = np.concatenate((X_default, X_mirror), axis=0)
 Y = np.concatenate((Y_default, Y_mirror), axis=0)
 P = np.concatenate((P_default, P_mirror), axis=0)
 L = np.concatenate((L_default, L_mirror), axis=0)
-
-print(X.shape, Y.shape, L.shape, P.shape)
 
 """ Calculate Mean and Std """
 
@@ -519,6 +514,7 @@ X_in = np.concatenate(X_train, axis=0)
 Y_in = np.concatenate(Y_train, axis=0)
 L_in = np.concatenate(L_train, axis=0)
 P_in = np.concatenate(P_train, axis=0)
+
 print("After batch processing...")
 print(X_in.shape, Y_in.shape, L_in.shape, P_in.shape)
 

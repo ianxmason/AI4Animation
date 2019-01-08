@@ -4,23 +4,31 @@ The code for the paper Few-shot Learning of Homogeneous Human Locomotion Styles 
 <!---
 To Do:
 
-In the data folder add the processing files both for the raw BVHs and the processed BVHs. Then clean up the motion folder. Need to look for this on backup hardrive.
-
 Redo the whole demo to be much better add all the necessary files.
 
 Test all code and add trained parameters for the final model.
 
-Once added everything and tested need to pull it onto a new computer in which I am not signed it and try running it all.
+Check all comments in every code file
+
+Once added everything and tested need to pull it onto a new computer in which I am not signed in and try running it all.
 
 
 Write readme:
 
 Requires theano
 
-Download the processed data from this link and put in Models/Data. The code used for processing the raw BVHs is already provided in this folder for reference.
+Large parts of this code are built from Holden (Cite & Link to Code) and Starke (Cite & Link to Code)
+
+
+Download the processed data from this link and put in Models/Data. The scripts in the Data_Processing_Scripts file were used to create this data from the raw BVH files, they are not needed to run this code but provided for completion.
 https://drive.google.com/open?id=1nqbvzOM_VhlYlotPfsdEgrqQ6vIayHyK
 
 First train full models then the fewshot ones
+Or Download Pre-trained Parameters
+
+You can read the full paper here (my website) 
+Citation [bibtex link]:
+Give citation in tex
 
 On the github say, as we say in the paper this is not highly engineered and results can probably be improved. Also say we fork an old version of ai4animation and link it. Add bibtex readme. (This is similar to the blog and requires same images as poster and presentation.)
 

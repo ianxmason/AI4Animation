@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
  
 public class FPS : MonoBehaviour {
-	public float Size = 0.01f;
+	public int Size = 15;
 
 	private float Padding = 10;
 	private float DeltaTime = 0.0f;
@@ -11,11 +11,10 @@ public class FPS : MonoBehaviour {
 	}
  
 	void OnGUI() {
-		int size = Mathf.RoundToInt(0.01f*Screen.width);
 		GUIStyle style = new GUIStyle();
-		Rect rect = new Rect(Padding, Screen.height-Padding-size, Screen.width-2f*Padding, size);
+		Rect rect = new Rect(Padding, Screen.height-Padding-Size, Screen.width-2f*Padding, Size);
 		style.alignment = TextAnchor.MiddleRight;
-		style.fontSize = size;
+		style.fontSize = Size;
 		style.normal.textColor = Color.black;
 		float msec = DeltaTime * 1000.0f;
 		float fps = 1.0f / DeltaTime;

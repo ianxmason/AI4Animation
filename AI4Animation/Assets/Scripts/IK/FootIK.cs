@@ -9,21 +9,10 @@ public class FootIK : MonoBehaviour {
 	public int Iterations = 10;
 	public Transform Root;
 	public Transform Ankle;
-	public Transform Joint;
 	public float Radius = 0.1f;
 	public Vector3 Offset = Vector3.zero;
-	public Vector3 WorldNormal = Vector3.down;
 	public Vector3 Normal = Vector3.down;
-	
 	public LayerMask Ground = 0;
-
-	public bool ImproveContact = false;
-
-	public bool Visualise = false;
-
-	public void ComputeNormal() {
-		Normal = WorldNormal.GetRelativeDirectionTo(Ankle.GetWorldMatrix());
-	}
 
 	private Vector3 TargetPosition;
 	private Quaternion TargetRotation;
@@ -64,31 +53,18 @@ public class FootIK : MonoBehaviour {
 	}
 
 	public void Solve() {
-		Solve(GetPivotPosition(), GetPivotRotation());
-	}
-
-	public void Solve(Vector3 pivotPosition, Quaternion pivotRotation, float damping=0f) {
-		float stepHeight = Mathf.Max(0f, pivotPosition.y - Root.position.y);
-
-		if(ImproveContact) {
-			float sliding = Mathf.Min(2f - Mathf.Pow(2f, Mathf.Clamp(stepHeight / Radius, 0f, 1f)));
-			pivotPosition = Vector3.Lerp(TargetPosition, pivotPosition, 1f - Mathf.Max(damping, sliding));
-		} else {
-			pivotPosition = Vector3.Lerp(TargetPosition, pivotPosition, 1f - damping);
-		}
-
-		Vector3 groundPosition = Utility.ProjectGround(pivotPosition, Ground);
-		Vector3 groundNormal = Utility.GetNormal(pivotPosition, Ground);
-		Vector3 footNormal = pivotRotation * Normal;
-
-		//TargetPosition = groundPosition;
-		//TargetPosition.y = Mathf.Max(groundPosition.y + stepHeight, pivotPosition.y);
-		TargetPosition = groundPosition + new Vector3(0f, stepHeight, 0f);
+		Vector3 groundPosition = Utility.ProjectGround(GetPivotPosition(), Ground);
+		Vector3 groundNormal = Utility.GetNormal(GetPivotPosition(), Ground);
+		Vector3 footNormal = GetPivotRotation() * Normal;
+		float stepHeight = Mathf.Max(0f, GetPivotPosition().y - Root.position.y);
+		
+		TargetPosition = groundPosition;
+		TargetPosition.y = Mathf.Max(groundPosition.y + stepHeight, GetPivotPosition().y);
 		if(TargetPosition.y <= groundPosition.y) {
-			TargetRotation = Quaternion.FromToRotation(footNormal, -groundNormal) * pivotRotation;
+			TargetRotation = Quaternion.FromToRotation(footNormal, -groundNormal) * GetPivotRotation();
 		} else {
 			float weight = 1f - Mathf.Clamp(Vector3.Distance(TargetPosition, groundPosition) / Radius, 0f, 1f);
-			TargetRotation = Quaternion.Slerp(pivotRotation, Quaternion.FromToRotation(footNormal, -groundNormal) * pivotRotation, weight);
+			TargetRotation = Quaternion.Slerp(GetPivotRotation(), Quaternion.FromToRotation(footNormal, -groundNormal) * GetPivotRotation(), weight);
 		}
 
 		for(int k=0; k<Iterations; k++) {
@@ -99,36 +75,27 @@ public class FootIK : MonoBehaviour {
 					(float)(i+1)/(float)Joints.Length
 				);
 			}
-			Joint.rotation = TargetRotation;
+			Ankle.rotation = TargetRotation;
 		}
 	}
 
-	public Vector3 GetPivotPosition() {
+	private Vector3 GetPivotPosition() {
 		return Ankle.position + Ankle.rotation * Offset;
 	}
 	
-	public Quaternion GetPivotRotation() {
-		return Joint.rotation;
-	}
-
-	void OnRenderObject() {
-		
+	private Quaternion GetPivotRotation() {
+		return Ankle.rotation;
 	}
 
 	void OnDrawGizmos() {
-		if(Visualise) {
-			if(Ankle == null || Joint == null || Normal == Vector3.zero) {
-				return;
-			}
-			if(!Application.isPlaying) {
-				ComputeNormal();
-			}
-			UltiDraw.Begin();
-			UltiDraw.DrawSphere(GetPivotPosition(), Quaternion.identity, 0.025f, UltiDraw.Cyan.Transparent(0.5f));
-			UltiDraw.DrawArrow(GetPivotPosition(), GetPivotPosition() + 0.25f * (GetPivotRotation() * Normal.normalized), 0.8f, 0.02f, 0.1f, UltiDraw.Cyan.Transparent(0.5f));
-			UltiDraw.DrawSphere(GetPivotPosition(), Quaternion.identity, Radius, UltiDraw.Mustard.Transparent(0.5f));
-			UltiDraw.End();
+		if(Ankle == null || Normal == Vector3.zero) {
+			return;
 		}
+		UltiDraw.Begin();
+		UltiDraw.DrawSphere(GetPivotPosition(), Quaternion.identity, 0.025f, UltiDraw.Cyan.Transparent(0.5f));
+		UltiDraw.DrawArrow(GetPivotPosition(), GetPivotPosition() + 0.25f * (GetPivotRotation() * Normal), 0.75f, 0.025f, 0.1f, UltiDraw.Cyan.Transparent(0.5f));
+		UltiDraw.DrawSphere(GetPivotPosition(), Quaternion.identity, Radius, UltiDraw.Red.Transparent(0.5f));
+		UltiDraw.End();
 	}
 
 }

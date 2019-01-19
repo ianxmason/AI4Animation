@@ -325,7 +325,7 @@ for i, style in enumerate(styletransfer_styles):
     trainer.train(network, E, F, filename='./Parameters/' + mname + '/Fewshot/fewshot_network.npz', restart=False, shuffle=False)
     end=time.time()
     elapsed = np.array([end-start])
-    print "Time to train style: " + style +": " + str(end-start)
+    print "\n Time to train style: " + style +": " + str(end-start)
     time_dict[style] = elapsed   # These dictionaries can be pickled if this data is required
     loss_dict[style] = trainer.train_losses
 

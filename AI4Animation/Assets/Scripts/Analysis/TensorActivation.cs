@@ -9,59 +9,49 @@ public class TensorActivation : MonoBehaviour {
     public enum OPERATOR {AbsSum, AbsDiff};
     public enum PLOTTING {Curve, Bars};
 
-    public UltiDraw.GUIRect Rect;
+    public GUIRect Rect;
     public string ID;
     public AXIS Axis;
     public OPERATOR Operator;
     public PLOTTING Plotting;
 
-    private NeuralNetwork NN;
+    private Model Model;
     private Tensor T;
     private float[] Values;
 
-    private float Minimum;
-    private float Maximum;
-
 	void Awake() {
-		NN = GetComponent<NeuralNetwork>();
-        Minimum = float.MaxValue;
-        Maximum = float.MinValue;
-    }
+		Model = GetComponent<BioAnimation>().NN.Model;
+	}
 
     void Start() {
-        T = new Tensor(1, 1, "Activation");
-    }
-
-    void OnEnable() {
-        Awake();
-        Start();
+        T = new Tensor(1, 1);
     }
 
 	void OnRenderObject() {
-        Tensor t = NN.GetTensor(ID);
+        Tensor t = Model.GetTensor(ID);
         if(t == null) {
             return;
         }
 
         T = Tensor.PointwiseAbsolute(t, T);
-        //float minimum = float.MaxValue;
-        //float maximum = float.MinValue;
+        float minimum = float.MaxValue;
+        float maximum = float.MinValue;
         
         if(Operator == OPERATOR.AbsSum) {
             if(Axis == AXIS.X) {
                 Values = new float[T.GetRows()];
                 for(int i=0; i<T.GetRows(); i++) {
                     Values[i] = T.RowSum(i);
-                    Minimum = Mathf.Min(Minimum, Values[i]);
-                    Maximum = Mathf.Max(Maximum, Values[i]);
+                    minimum = Mathf.Min(minimum, Values[i]);
+                    maximum = Mathf.Max(maximum, Values[i]);
                 }
             }
             if(Axis == AXIS.Y) {
                 Values = new float[T.GetCols()];
                 for(int i=0; i<T.GetCols(); i++) {
                     Values[i] = T.ColSum(i);
-                    Minimum = Mathf.Min(Minimum, Values[i]);
-                    Maximum = Mathf.Max(Maximum, Values[i]);
+                    minimum = Mathf.Min(minimum, Values[i]);
+                    maximum = Mathf.Max(maximum, Values[i]);
                 }
             }
         }
@@ -73,29 +63,44 @@ public class TensorActivation : MonoBehaviour {
             UltiDraw.Black.Transparent(0.5f)
         );
         if(Plotting == PLOTTING.Curve) {
-            UltiDraw.DrawGUIFunction(
+            UltiDraw.DrawFunction(
                 new Vector2(Rect.X, Rect.Y),
                 new Vector2(Rect.W, Rect.H),
                 Values,
-                0f,
-                Maximum,
+                minimum,
+                maximum,
                 UltiDraw.White.Transparent(0.5f),
                 UltiDraw.Black
             );
         }
         if(Plotting == PLOTTING.Bars) {
-            UltiDraw.DrawGUIBars(
+            UltiDraw.DrawBars(
                 new Vector2(Rect.X, Rect.Y),
                 new Vector2(Rect.W, Rect.H),
                 Values,
-                0f,
-                Maximum,
+                minimum,
+                maximum,
                 0.75f * Rect.W / Values.Length,
                 UltiDraw.White.Transparent(0.5f),
                 UltiDraw.Black
             );
         }
 		UltiDraw.End();
+
+        /*
+        Feature[] features = new Feature[Values.Length];
+        for(int i=0; i<Values.Length; i++) {
+            features[i] = new Feature(i, Values[i]);
+        }
+        System.Array.Sort(features,
+			delegate(Feature a, Feature b) {
+				return b.Value.CompareTo(a.Value);
+			}
+		);
+        for(int i=0; i<30; i++) {
+            Debug.Log(i + " - " + "Value: " + features[i].Value + " Index: " + features[i].Index);
+        }
+        */
 	}
 
     public struct Feature {

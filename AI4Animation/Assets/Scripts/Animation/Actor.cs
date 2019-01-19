@@ -11,11 +11,10 @@ public class Actor : MonoBehaviour {
 
 	public bool InspectSkeleton = false;
 	
-	public bool DrawRoot = false;
+	public bool DrawRoot = true;
 	public bool DrawSkeleton = true;
-	public bool DrawVelocities = false;
 	public bool DrawTransforms = false;
-	
+
 	public float BoneSize = 0.025f;
 	public Color BoneColor = UltiDraw.Black;
 	public Color JointColor = UltiDraw.Mustard;
@@ -52,10 +51,6 @@ public class Actor : MonoBehaviour {
 
 	public Bone FindBone(string name) {
 		return Array.Find(Bones, x => x.GetName() == name);
-	}
-
-	public Bone FindBoneContains(string name) {
-		return Array.Find(Bones, x => x.GetName().Contains(name));
 	}
 
 	public void ExtractSkeleton() {
@@ -96,64 +91,30 @@ public class Actor : MonoBehaviour {
 		recursion(GetRoot(), null);
 	}
 
-	/*
-	public Matrix4x4[] GetLocalPosture() {
-		Matrix4x4[] posture = new Matrix4x4[Bones.Length];
-		for(int i=0; i<posture.Length; i++) {
-			posture[i] = i == 0 ? Bones[i].Transform.GetWorldMatrix() : Bones[i].Transform.GetLocalMatrix();
-		}
-		return posture;
-	}
-
-	public Matrix4x4[] GetWorldPosture() {
-		Matrix4x4[] posture = new Matrix4x4[Bones.Length];
-		for(int i=0; i<posture.Length; i++) {
-			posture[i] = Bones[i].Transform.GetWorldMatrix();
-		}
-		return posture;
-	}
-	*/
-
-	public Matrix4x4[] GetPosture() {
-		Matrix4x4[] posture = new Matrix4x4[Bones.Length];
-		for(int i=0; i<posture.Length; i++) {
-			posture[i] = Bones[i].Transform.GetWorldMatrix();
-		}
-		return posture;
-	}
-
-	public Vector3[] GetVelocities() {
-		Vector3[] velocities = new Vector3[Bones.Length];
-		for(int i=0; i<velocities.Length; i++) {
-			velocities[i] = Bones[i].Velocity;
-		}
-		return velocities;
-	}
-
 	public void Draw() {
 		Draw(BoneColor, JointColor, 1f);
 	}
 
 	public void Draw(Color boneColor, Color jointColor, float alpha) {
 		UltiDraw.Begin();
+
 		if(DrawRoot) {
 			UltiDraw.DrawTranslateGizmo(GetRoot().position, GetRoot().rotation, 0.1f);
 			UltiDraw.DrawSphere(GetRoot().position, GetRoot().rotation, 0.025f, UltiDraw.Black);
-			UltiDraw.DrawLine(Bones[0].Transform.position, GetRoot().position, UltiDraw.Mustard);
 		}
 
 		if(DrawSkeleton) {
 			Action<Bone> recursion = null;
 			recursion = new Action<Bone>((bone) => {
 				if(bone.GetParent() != null) {
-					//if(bone.GetLength() > 0.05f) {
+					if(bone.GetLength() > 0.05f) {
 						UltiDraw.DrawBone(
 							bone.GetParent().Transform.position,
 							Quaternion.FromToRotation(bone.GetParent().Transform.forward, bone.Transform.position - bone.GetParent().Transform.position) * bone.GetParent().Transform.rotation,
-							12.5f*BoneSize*bone.GetLength(), bone.GetLength(),
+							4f*BoneSize, bone.GetLength(),
 							boneColor.Transparent(alpha)
 						);
-					//}
+					}
 				}
 				UltiDraw.DrawSphere(
 					bone.Transform.position,
@@ -170,21 +131,6 @@ public class Actor : MonoBehaviour {
 			}
 		}
 
-		if(DrawVelocities) {
-			UltiDraw.Begin();
-			for(int i=0; i<Bones.Length; i++) {
-				UltiDraw.DrawArrow(
-					Bones[i].Transform.position,
-					Bones[i].Transform.position + Bones[i].Velocity,
-					0.75f,
-					0.0075f,
-					0.05f,
-					UltiDraw.Purple.Transparent(0.5f)
-				);
-			}
-			UltiDraw.End();
-		}
-
 		if(DrawTransforms) {
 			Action<Bone> recursion = null;
 			recursion = new Action<Bone>((bone) => {
@@ -197,11 +143,13 @@ public class Actor : MonoBehaviour {
 				recursion(Bones[0]);
 			}
 		}
+
 		UltiDraw.End();
 	}
 
 	public void DrawSimple(Color color) {
 		UltiDraw.Begin();
+
 		if(DrawSkeleton) {
 			Action<Bone> recursion = null;
 			recursion = new Action<Bone>((bone) => {
@@ -217,11 +165,14 @@ public class Actor : MonoBehaviour {
 				recursion(Bones[0]);
 			}
 		}
+
 		UltiDraw.End();
 	}
 
+
 	public void DrawSimple(Color color, Matrix4x4[] transformations) {
 		UltiDraw.Begin();
+
 		if(DrawSkeleton) {
 			Action<Bone> recursion = null;
 			recursion = new Action<Bone>((bone) => {
@@ -237,6 +188,7 @@ public class Actor : MonoBehaviour {
 				recursion(Bones[0]);
 			}
 		}
+
 		UltiDraw.End();
 	}
 
@@ -254,7 +206,6 @@ public class Actor : MonoBehaviour {
 	public class Bone {
 		public Actor Actor;
 		public Transform Transform;
-		public Vector3 Velocity;
 		public int Index;
 		public int Parent;
 		public int[] Childs;
@@ -262,7 +213,6 @@ public class Actor : MonoBehaviour {
 		public Bone(Actor actor, Transform transform, int index) {
 			Actor = actor;
 			Transform = transform;
-			Velocity = Vector3.zero;
 			Index = index;
 			Parent = -1;
 			Childs = new int[0];
@@ -306,7 +256,6 @@ public class Actor : MonoBehaviour {
 			EditorGUILayout.ObjectField("Root", Target.GetRoot(), typeof(Transform), true);
 			Target.DrawRoot = EditorGUILayout.Toggle("Draw Root", Target.DrawRoot);
 			Target.DrawSkeleton = EditorGUILayout.Toggle("Draw Skeleton", Target.DrawSkeleton);
-			Target.DrawVelocities = EditorGUILayout.Toggle("Draw Velocities", Target.DrawVelocities);
 			Target.DrawTransforms = EditorGUILayout.Toggle("Draw Transforms", Target.DrawTransforms);
 
 			Utility.SetGUIColor(Color.white);
@@ -343,9 +292,8 @@ public class Actor : MonoBehaviour {
 					EditorGUILayout.LabelField("|", GUILayout.Width(20f));
 				}
 				EditorGUILayout.LabelField("-", GUILayout.Width(20f));
-				EditorGUILayout.LabelField(transform.name + " " + (bone == null ? string.Empty : "(" + bone.Index.ToString() + ")"), GUILayout.Width(100f), GUILayout.Height(20f));
+				EditorGUILayout.LabelField(transform.name, GUILayout.Width(100f), GUILayout.Height(20f));
 				GUILayout.FlexibleSpace();
-
 				if(Utility.GUIButton("Bone", bone == null ? UltiDraw.White : UltiDraw.DarkGrey, bone == null ? UltiDraw.DarkGrey : UltiDraw.White)) {
 					Transform[] bones = new Transform[Target.Bones.Length];
 					for(int i=0; i<bones.Length; i++) {

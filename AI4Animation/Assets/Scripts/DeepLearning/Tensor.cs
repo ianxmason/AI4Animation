@@ -6,13 +6,11 @@ namespace DeepLearning {
     public class Tensor {
 
         public IntPtr Ptr;
-        public string ID;
 
         private bool Deleted;
         
-        public Tensor(int rows, int cols, string id = "") {
+        public Tensor(int rows, int cols) {
             Ptr = Eigen.Create(rows, cols);
-            ID = id;
             Deleted = false;
         }
 
@@ -39,13 +37,9 @@ namespace DeepLearning {
             Eigen.SetZero(Ptr);
         }
 
-        public void SetSize(int rows, int cols) {
-            Eigen.SetSize(Ptr, rows, cols);
-        }
-
         public void SetValue(int row, int col, float value) {
             if(row >= GetRows() || col >= GetCols()) {
-                Debug.Log("Setting out of bounds at [" + row + ", " + col + "].");
+                Debug.Log("Accessing out of bounds.");
                 return;
             }
             Eigen.SetValue(Ptr, row, col, value);
@@ -53,7 +47,7 @@ namespace DeepLearning {
 
         public float GetValue(int row, int col) {
             if(row >= GetRows() || col >= GetCols()) {
-                Debug.Log("Getting out of bounds at [" + row + ", " + col + "].");
+                Debug.Log("Accessing out of bounds.");
                 return 0f;
             }
             return Eigen.GetValue(Ptr, row, col);
@@ -114,38 +108,6 @@ namespace DeepLearning {
             return OUT;
         }
 
-        public float RowMean(int row) {
-            if(row >= GetRows()) {
-                Debug.Log("Accessing out of bounds.");
-                return 0f;
-            }
-            return Eigen.RowMean(Ptr, row);
-        }
-
-        public float ColMean(int col) {
-            if(col >= GetCols()) {
-                Debug.Log("Accessing out of bounds.");
-                return 0f;
-            }
-            return Eigen.ColMean(Ptr, col);
-        }
-
-        public float RowStd(int row) {
-            if(row >= GetRows()) {
-                Debug.Log("Accessing out of bounds.");
-                return 0f;
-            }
-            return Eigen.RowStd(Ptr, row);
-        }
-
-        public float ColStd(int col) {
-            if(col >= GetCols()) {
-                Debug.Log("Accessing out of bounds.");
-                return 0f;
-            }
-            return Eigen.ColStd(Ptr, col);
-        }
-
         public float RowSum(int row) {
             if(row >= GetRows()) {
                 Debug.Log("Accessing out of bounds.");
@@ -162,16 +124,6 @@ namespace DeepLearning {
             return Eigen.ColSum(Ptr, col);
         }
 
-        public void Print() {
-            string output = string.Empty;
-            for(int i=0; i<GetRows(); i++) {
-                for(int j=0; j<GetCols(); j++) {
-                    output += GetValue(i, j) + " "; 
-                }
-                output += "\n";
-            }
-            Debug.Log(output);
-        }
     }
 
 }

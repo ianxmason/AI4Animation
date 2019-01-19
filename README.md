@@ -4,6 +4,8 @@ The code for the paper Few-shot Learning of Homogeneous Human Locomotion Styles 
 <!---
 To Do:
 
+Currently testing unity and getting an accessing out of bounds error for CP. Can try diag or full versions and see if still get the error. (Have mostly cleaned up unity)
+
 Redo the whole demo to be much better add all the necessary files.
 
 Test all code and add trained parameters for the final model.
@@ -25,6 +27,8 @@ About
 This github repository provides the accompanying code for the paper <a href="https://ianxmason.github.io/papers/fewshot_style.pdf" target="_blank">Few-shot Learning of Homogeneous Human Locomotion Styles</a>, winner of the Best Student Paper Award at Pacific Graphics 2018. You can read more about our work and view the accompanying video <a href="https://ianxmason.github.io/posts/fewshot-style/" target="_blank">here</a>.
 
 Large parts of this code are built from the Phase-Functioned Neural Network by Holden et al. (<a href="http://theorangeduck.com/media/uploads/other_stuff/phasefunction.pdf" target="_blank">Paper</a> & <a href="http://theorangeduck.com/page/phase-functioned-neural-networks-character-control" target="_blank">Code</a>) and the Mode Adaptive Neural Network by Zhang & Starke et al. (<a href="http://homepages.inf.ed.ac.uk/tkomura/dog.pdf" target="_blank">Paper</a> & <a href="https://github.com/sebastianstarke/AI4Animation" target="_blank">Code</a>).
+
+ADD ABSTRACT
 
 As discussed in the paper our solution is not highly engineered and we suspect the results can be qualitatively improved with further engineering such as finding the optimal size of CP decomposition tensors or the ideal point for early stopping. 
 
@@ -50,6 +54,17 @@ Running the Demo
 
 The demo is built in Unity
 MORE EXPLANATION
+For full res ads probably cannot load all the resads at once hence only a few styles work at any one time - you can change which styles in the PFNN_res_full file
+
+The demo has only been tested on linux, there are some hardcoded path variables so it is suggested to save this repo to your home directory
+Select the skeleton in the scene ensure the correct sprict is attached
+Autodetect joints
+Initialise the controller by clicking it and then click again to minimise
+Select the character and emove the root projection bone by selecting the first joint
+Set the neural network correctly:
+Set folder to the location of the parameters e.g. /home/<usr>/Fewshot_Learning_of_Homogeneous_Human_Locomotion_Styles/Models/Parameters/CP
+Set dimensionality correctly XDim = 234, Hdim = 512, Ydim = 400
+
 
 Citation
 ------------

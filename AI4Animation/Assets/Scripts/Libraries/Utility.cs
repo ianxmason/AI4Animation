@@ -1,8 +1,15 @@
 ﻿using UnityEngine;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+
+[System.Serializable]
+public class GUIRect {
+	[Range(0f, 1f)] public float X = 0.5f;
+	[Range(0f, 1f)] public float Y = 0.5f;
+	[Range(0f, 1f)] public float W = 0.5f;
+	[Range(0f, 1f)] public float H = 0.5f;
+}
 
 public sealed class Gaussian {
     private bool _hasDeviate;
@@ -51,15 +58,6 @@ public sealed class Gaussian {
 }
 
 public static class Utility {
-
-	public static System.Random RNG;
-
-	public static System.Random GetRNG() {
-		if(RNG == null) {
-			RNG = new System.Random();
-		}
-		return RNG;
-	}
 
 	public static Quaternion QuaternionEuler(float roll, float pitch, float yaw) {
 		roll *= Mathf.Deg2Rad / 2f;
@@ -158,21 +156,7 @@ public static class Utility {
 	public static float LinSin3(float a, float f, float s, float o, float m, float t) {
 		return a * f * f * f * -Mathf.Cos(f * (t - s) * 2f * Mathf.PI);
 	}
-
-	public static float Gaussian(float mean, float std, float x) {
-		return 1f/(std*Mathf.Sqrt(2f*Mathf.PI)) * Mathf.Exp(-0.5f*(x*x)/(std*std));
-	}
 	
-	public static float Sigmoid(float x) {
-		return 1f / (1f + Mathf.Exp(-x));
-	}
-
-	public static float TanH(float x) {
-		float positive = Mathf.Exp(x);
-		float negative = Mathf.Exp(-x);
-		return (positive-negative) / (positive+negative);
-	}
-
 	public static float Interpolate(float from, float to, float amount) {
 		amount = Mathf.Clamp(amount,0f,1f);
 		return (1f-amount)*from + amount*to;
@@ -198,22 +182,6 @@ public static class Utility {
 		return Quaternion.Slerp(from,to,amount);
 	}
 
-	public static Matrix4x4 Interpolate(Matrix4x4 from, Matrix4x4 to, float amount) {
-		return Matrix4x4.TRS(Interpolate(from.GetPosition(), to.GetPosition(), amount), Interpolate(from.GetRotation(), to.GetRotation(), amount), Vector3.one);
-	}
-
-	public static float[] Interpolate(float[] from, float[] to, float amount) {
-		if(from.Length != to.Length) {
-			Debug.Log("Interpolation not possible.");
-			return from;
-		}
-		float[] result = new float[from.Length];
-		for(int i=0; i<result.Length; i++) {
-			result[i] = Interpolate(from[i], to[i], amount);
-		}
-		return result;
-	}
-
 	public static float GetSignedAngle(Vector3 A, Vector3 B, Vector3 axis) {
 		return Mathf.Atan2(
 			Vector3.Dot(axis, Vector3.Cross(A, B)),
@@ -223,6 +191,30 @@ public static class Utility {
 
 	public static Vector3 RotateAround(Vector3 vector, Vector3 pivot, Vector3 axis, float angle) {
 		return Quaternion.AngleAxis(angle, axis) * (vector - pivot) + vector;
+	}
+
+	public static void OverridePosition(this Transform transform, Vector3 position) {
+		Transform[] childs = new Transform[transform.childCount];
+		for(int i=0; i<childs.Length; i++) {
+			childs[i] = transform.GetChild(i);
+		}
+		transform.DetachChildren();
+		transform.position = position;
+		for(int i=0; i<childs.Length; i++) {
+			childs[i].SetParent(transform);
+		}
+	}
+
+	public static void OverrideRotation(this Transform transform, Quaternion rotation) {
+		Transform[] childs = new Transform[transform.childCount];
+		for(int i=0; i<childs.Length; i++) {
+			childs[i] = transform.GetChild(i);
+		}
+		transform.DetachChildren();
+		transform.rotation = rotation;
+		for(int i=0; i<childs.Length; i++) {
+			childs[i].SetParent(transform);
+		}
 	}
 
 	public static Vector3 ProjectCollision(Vector3 start, Vector3 end, LayerMask mask) {
@@ -281,64 +273,6 @@ public static class Utility {
 		return Vector3.Angle(normal, Vector3.up) / 90f;
 	}
 
-	public static Vector3 GetNormal(Vector3 position, Vector3 point, Collider collider, float radius, LayerMask mask) {
-		if(position == point) {
-			List<RaycastHit> hits = new List<RaycastHit>();
-			Quaternion rotation = collider.transform.rotation;
-
-			Vector3 x = rotation * Vector3.right;
-			Vector3 y = rotation * Vector3.up;
-			Vector3 z = rotation * Vector3.forward;
-
-			RaycastHit XP;
-			if(Physics.Raycast(point + radius * x, -x, out XP, 2f*radius, mask)) {
-				hits.Add(XP);
-			}
-			RaycastHit XN;
-			if(Physics.Raycast(point + radius * -x, x, out XN, 2f*radius, mask)) {
-				hits.Add(XN);
-			}
-			RaycastHit YP;
-			if(Physics.Raycast(point + radius * y, -y, out YP, 2f*radius, mask)) {
-				hits.Add(YP);
-			}
-			RaycastHit YN;
-			if(Physics.Raycast(point + radius * -y, y, out YN, 2f*radius, mask)) {
-				hits.Add(YN);
-			}
-			RaycastHit ZP;
-			if(Physics.Raycast(point + radius * z, -z, out ZP, 2f*radius, mask)) {
-				hits.Add(ZP);
-			}
-			RaycastHit ZN;
-			if(Physics.Raycast(point + radius * -z, z, out ZN, 2f*radius, mask)) {
-				hits.Add(ZN);
-			}
-			
-			if(hits.Count > 0) {
-				RaycastHit closest = hits[0];
-				for(int k=1; k<hits.Count; k++) {
-					if(Vector3.Distance(hits[k].point, point) < Vector3.Distance(closest.point, point)) {
-						closest = hits[k];
-					}
-				}
-				return closest.normal;
-			} else {
-				Debug.Log("Could not compute normal for collider " + collider.name + ".");
-				return Vector3.zero;
-			}
-		} else {
-			RaycastHit hit;
-			if(Physics.Raycast(position, (point - position).normalized, out hit, 2f*radius, mask)) {
-				return hit.normal;
-			} else {
-				Debug.Log("Could not compute normal for collider " + collider.name + ".");
-				return Vector3.zero;
-			}
-			
-		}
-	}
-
 	public static Vector3 GetNormal(Vector3 origin, LayerMask mask) {
 		RaycastHit[] upHits = Physics.RaycastAll(origin+Vector3.down, Vector3.up, float.PositiveInfinity, mask);
 		RaycastHit[] downHits = Physics.RaycastAll(origin+Vector3.up, Vector3.down, float.PositiveInfinity, mask);
@@ -362,11 +296,11 @@ public static class Utility {
 		return normal;
 	}
 
-	public static void Destroy(UnityEngine.Object o, bool allowDestroyingAssets = true) {
+	public static void Destroy(UnityEngine.Object o) {
 		if(Application.isPlaying) {
 			GameObject.Destroy(o);
 		} else {
-			GameObject.DestroyImmediate(o, allowDestroyingAssets);
+			GameObject.DestroyImmediate(o);
 		}
 	}
 
@@ -462,7 +396,7 @@ public static class Utility {
 		if(int.TryParse(value, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out parsed)) {
 			return parsed;
 		} else {
-			//Debug.Log("Error parsing " + value + "!");
+			Debug.Log("Error parsing " + value + "!");
 			return 0;
 		}
 	}
@@ -472,51 +406,165 @@ public static class Utility {
 		if(float.TryParse(value, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out parsed)) {
 			return parsed;
 		} else {
-			//Debug.Log("Error parsing " + value + "!");
+			Debug.Log("Error parsing " + value + "!");
 			return 0f;
 		}
 	}
 
-	public static void Normalise(ref float[] values) {
-		/*
-		float min = values.Min();
-		float max = values.Max();
+	public static int ComputeMin(int[] values) {
+		if(values.Length == 0) {
+			return 0;
+		}
+		int min = int.MaxValue;
 		for(int i=0; i<values.Length; i++) {
-			values[i] = Utility.Normalise(values[i], min, max, 0f, 1f);
+			min = Mathf.Min(min, values[i]);
 		}
-        float frac = 0.0f;
-        for(int i=0; i<values.Length; i++) {
-            frac += values[i];
-        }
-		if(frac != 0f) {
-        	for(int i=0; i<values.Length; i++) {
-            	values[i] /= frac;
-        	}
-		}
-		*/
-		float sum = 0f;
-		for(int i=0; i<values.Length; i++) {
-			sum += Mathf.Abs(values[i]);
-		}
-		if(sum != 0f) {
-			for(int i=0; i<values.Length; i++) {
-				values[i] = Mathf.Abs(values[i]) / sum;
-			}
-		}
+		return min;
 	}
 
-	public static void SoftMax(ref float[] values) {
-		float frac = 0f;
-		for(int i=0; i<values.Length; i++) {
-			values[i] = Mathf.Exp(values[i]);
-			frac += values[i];
+	public static float ComputeMin(float[] values) {
+		if(values.Length == 0) {
+			return 0f;
 		}
+		float min = float.MaxValue;
 		for(int i=0; i<values.Length; i++) {
-			values[i] /= frac;
+			min = Mathf.Min(min, values[i]);
 		}
+		return min;
 	}
 
-	public static Quaternion QuaternionAverage(Quaternion[] quaternions) {
+	public static double ComputeMin(double[] values) {
+		if(values.Length == 0) {
+			return 0.0;
+		}
+		double min = double.MaxValue;
+		for(int i=0; i<values.Length; i++) {
+			min = System.Math.Min(min, values[i]);
+		}
+		return min;
+	}
+
+	public static int ComputeMax(int[] values) {
+		if(values.Length == 0) {
+			return 0;
+		}
+		int max = int.MinValue;
+		for(int i=0; i<values.Length; i++) {
+			max = Mathf.Max(max, values[i]);
+		}
+		return max;
+	}
+
+	public static float ComputeMax(float[] values) {
+		if(values.Length == 0) {
+			return 0f;
+		}
+		float max = float.MinValue;
+		for(int i=0; i<values.Length; i++) {
+			max = Mathf.Max(max, values[i]);
+		}
+		return max;
+	}
+
+	public static double ComputeMax(double[] values) {
+		if(values.Length == 0) {
+			return 0.0;
+		}
+		double max = double.MinValue;
+		for(int i=0; i<values.Length; i++) {
+			max = System.Math.Max(max, values[i]);
+		}
+		return max;
+	}
+
+	public static float ComputeMean(int[] values) {
+		if(values.Length == 0) {
+			return 0;
+		}
+		float mean = 0f;
+		float args = 0f;
+		for(int i=0; i<values.Length; i++) {
+			mean += values[i];
+			args += 1f;
+		}
+		mean /= args;
+		return mean;
+	}
+
+	public static float ComputeMean(float[] values) {
+		if(values.Length == 0) {
+			return 0f;
+		}
+		float mean = 0f;
+		float args = 0f;
+		for(int i=0; i<values.Length; i++) {
+			mean += values[i];
+			args += 1f;
+		}
+		mean /= args;
+		return mean;
+	}
+
+	public static double ComputeMean(double[] values) {
+		if(values.Length == 0) {
+			return 0.0;
+		}
+		double mean = 0.0;
+		double args = 0.0;
+		for(int i=0; i<values.Length; i++) {
+			mean += values[i];
+			args += 1.0;
+		}
+		mean /= args;
+		return mean;
+	}
+
+	public static float ComputeSigma(int[] values) {
+		if(values.Length == 0) {
+			return 0f;
+		}
+		float variance = 0f;
+		float mean = ComputeMean(values);
+		float args = 0f;
+		for(int i=0; i<values.Length; i++) {
+			variance += Mathf.Pow(values[i] - mean, 2f);
+			args += 1f;
+		}
+		variance /= args;
+		return Mathf.Sqrt(variance);
+	}
+
+	public static float ComputeSigma(float[] values) {
+		if(values.Length == 0) {
+			return 0f;
+		}
+		float variance = 0f;
+		float mean = ComputeMean(values);
+		float args = 0f;
+		for(int i=0; i<values.Length; i++) {
+			variance += Mathf.Pow(values[i] - mean, 2f);
+			args += 1f;
+		}
+		variance /= args;
+		return Mathf.Sqrt(variance);
+	}
+
+	public static double ComputeSigma(double[] values) {
+		if(values.Length == 0) {
+			return 0.0;
+		}
+		double variance = 0.0;
+		double mean = ComputeMean(values);
+		double args = 1.0;
+		for(int i=0; i<values.Length; i++) {
+			variance += System.Math.Pow(values[i] - mean, 2.0);
+			args += 1.0;
+		}
+		variance /= args;
+		return System.Math.Sqrt(variance);
+	}
+
+	public static Quaternion AverageQuaternions(Quaternion[] quaternions) {
 		Vector3 forward = Vector3.zero;
 		Vector3 upwards = Vector3.zero;
 		for(int i=0; i<quaternions.Length; i++) {
@@ -527,92 +575,4 @@ public static class Utility {
 		upwards /= quaternions.Length;
 		return Quaternion.LookRotation(forward, upwards);
 	}
-
-	public static float GaussianValue(float mean, float sigma) {
-		if(mean == 0f && sigma == 0f) {
-			return 0f;
-		}
-		// The method requires sampling from a uniform random of (0,1]
-		// but Random.NextDouble() returns a sample of [0,1).
-		double x1 = 1 - GetRNG().NextDouble();
-		double x2 = 1 - GetRNG().NextDouble();
-		double y1 = Math.Sqrt(-2.0 * Math.Log(x1)) * Math.Cos(2.0 * Math.PI * x2);
-		return (float)(y1 * sigma + mean);
-	}
-
-	public static Vector3 GaussianVector3(float mean, float sigma) {
-		return new Vector3(GaussianValue(mean, sigma), GaussianValue(mean, sigma), GaussianValue(mean, sigma));
-	}
-	
-	/*
-	public static float GetLinearPhase(float value) {
-		return value;
-	}
-
-	public static float GetLinearPhaseUpdate(float from, float to) {
-		return Mathf.Repeat(((GetLinearPhase(to)-GetLinearPhase(from)) + 1f), 1f);
-	}
-
-	public static float GetWavePhase(float value) {
-		return Mathf.Sin(value*2f*Mathf.PI);
-	}
-
-	public static float GetWavePhaseUpdate(float from, float to) {
-		return GetWavePhase(to) - GetWavePhase(from);
-	}
-
-	public static Vector2 GetBarPhase(float value) {
-		return new Vector2(2f * Mathf.Abs(0.5f - value), 1f - 2f * Mathf.Abs(0.5f - value));
-	}
-
-	public static Vector2 GetBarPhaseUpdate(float from, float to) {
-		return GetBarPhase(to) - GetBarPhase(from);
-	}
-
-	public static Vector2 GetCirclePhase(float value) {
-		value *= 2f*Mathf.PI;
-		return new Vector2(Mathf.Sin(value), Mathf.Cos(value));
-		//return Quaternion.AngleAxis(-value*360f, Vector3.forward) * Vector2.up;
-	}
-
-	public static Vector2 GetCirclePhaseUpdate(float from, float to) {
-		return GetCirclePhase(to) - GetCirclePhase(from);
-	}
-	*/
-
-	public static float PhaseUpdate(float from, float to) {
-		return Mathf.Repeat((to - from + 1f), 1f);
-	}
-
-	public static Vector2 PhaseVector(float phase) {
-		phase *= 2f*Mathf.PI;
-		return new Vector2(Mathf.Sin(phase), Mathf.Cos(phase));
-	}
-
-	public static float PhaseAverage(float[] values) {
-		float[] x = new float[values.Length];
-		float[] y = new float[values.Length];
-		for(int i=0; i<values.Length; i++) {
-			Vector2 v = PhaseVector(values[i]);
-			x[i] = v.x;
-			y[i] = v.y;
-		}
-		return Mathf.Repeat(-Vector2.SignedAngle(Vector2.up, new Vector2(FilterGaussian(x), FilterGaussian(y)).normalized) / 360f, 1f);
-	}
-
-	public static float FilterGaussian(float[] values) {
-		if(values.Length == 0) {
-			return 0f;
-		}
-		float window = ((float)values.Length - 1f) / 2f;
-		float sum = 0f;
-		float value = 0f;
-		for(int i=0; i<values.Length; i++) {
-			float weight = Mathf.Exp(-Mathf.Pow((float)i - window, 2f) / Mathf.Pow(0.5f * window, 2f));
-			value += weight * values[i];
-			sum += weight;
-		}
-		return value / sum;
-	}
-
 }

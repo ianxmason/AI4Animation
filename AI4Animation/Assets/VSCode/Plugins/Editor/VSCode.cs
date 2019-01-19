@@ -966,7 +966,7 @@ namespace dotBunny.Unity
         /// <summary>
         /// Executed when the Editor's playmode changes allowing for capture of required data
         /// </summary>
-        static void OnPlaymodeStateChanged(PlayModeStateChange state)
+        static void OnPlaymodeStateChanged()
         {
             if (UnityEngine.Application.isPlaying && EditorApplication.isPlayingOrWillChangePlaymode)
             {
@@ -980,8 +980,8 @@ namespace dotBunny.Unity
         [UnityEditor.Callbacks.DidReloadScripts()]
         static void OnScriptReload()
         {
-            EditorApplication.playModeStateChanged -= OnPlaymodeStateChanged;
-            EditorApplication.playModeStateChanged += OnPlaymodeStateChanged;
+            EditorApplication.playmodeStateChanged -= OnPlaymodeStateChanged;
+            EditorApplication.playmodeStateChanged += OnPlaymodeStateChanged;
         }
 
         /// <summary>

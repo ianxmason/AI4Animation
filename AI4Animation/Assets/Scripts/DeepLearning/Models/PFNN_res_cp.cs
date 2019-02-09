@@ -40,12 +40,11 @@ namespace DeepLearning {
 			}  
 			file.Close(); 
 
-			// Due to inconsistencies we need this manual correction
+			// Due to naming inconsistencies we need this manual correction
 			style_list[0] = "/ang";
 			style_list[1] = "/chi";
 			style_list[2] = "/dep";
 			style_list[3] = "/neu";
-			// style_list[3] = "/ang";
 			style_list[4] = "/old";
 			style_list[5] = "/pro";
 			style_list[6] = "/sex";
@@ -78,49 +77,22 @@ namespace DeepLearning {
 
 
 			for(int i=0; i<58; i++){
-			// for(int i=0; i<17; i++){
 				Parameters.Store(Folder+style_list[i]+"_W0"+".bin", 30, HDim);
 			}	
 
 			for(int i=0; i<58; i++){
-			// for(int i=0; i<17; i++){
 				for(int j=0; j<50; j++) {
 					Parameters.Store(Folder+style_list[i]+"_W1_"+j.ToString("D3")+".bin", 30, 1);
 				}
 			}	
 
 			for(int i=0; i<58; i++){
-			// for(int i=0; i<17; i++){
 				Parameters.Store(Folder+style_list[i]+"_W2"+".bin", HDim, 30);
 			}
 
 			for(int i=0; i<58; i++){
-			// for(int i=0; i<17; i++){
 				Parameters.Store(Folder+style_list[i]+"_b"+".bin", HDim, 1);
 			}
-
-
-			// for(int i=8; i<58; i++){
-			// // for(int i=0; i<8; i++){
-			// 	Parameters.Store(Folder+style_list[i]+"_W0"+".bin", 30, HDim);
-			// }	
-
-			// for(int i=8; i<58; i++){
-			// // for(int i=0; i<8; i++){
-			// 	for(int j=0; j<50; j++) {
-			// 		Parameters.Store(Folder+style_list[i]+"_W1_"+j.ToString("D3")+".bin", 30, 1);
-			// 	}
-			// }	
-
-			// for(int i=8; i<58; i++){
-			// // for(int i=0; i<8; i++){
-			// 	Parameters.Store(Folder+style_list[i]+"_W2"+".bin", HDim, 30);
-			// }
-
-			// for(int i=8; i<58; i++){
-			// // for(int i=0; i<8; i++){
-			// 	Parameters.Store(Folder+style_list[i]+"_b"+".bin", HDim, 1);
-			// }
 		}
 
 		public override void LoadParameters() {
@@ -148,14 +120,6 @@ namespace DeepLearning {
 			}
 			sty_W2 = new Tensor[58];
 			sty_b = new Tensor[58];
-
-			// sty_W0 = new Tensor[8];
-			// sty_W1 = new List<Tensor[]>(8);
-			// for(int i=0; i<8; i++){
-			// 	sty_W1.Add(new Tensor[50]);
-			// }
-			// sty_W2 = new Tensor[8];
-			// sty_b = new Tensor[8];
 			
 			for(int i=0; i<50; i++) {
 				W0[i] = CreateTensor(Parameters.Load(4 + i*6 + 0), "W0"+i);
@@ -167,54 +131,22 @@ namespace DeepLearning {
 			}
 
 			for(int i=0; i<58; i++){
-			// for(int i=0; i<17; i++){
 				sty_W0[i] = CreateTensor(Parameters.Load(4 + 6*50 + i), switch_list[i]+"_W0");
 			}	
 
 			for(int i=0; i<58; i++){
-			// for(int i=0; i<17; i++){
 				for(int j=0; j<50; j++) {
 					sty_W1[i][j] = CreateTensor(Parameters.Load(4 + 6*50 + 58 + i*50 + j), switch_list[i]+"_W1_"+j);
-					// sty_W1[i][j] = CreateTensor(Parameters.Load(4 + 6*50 + 17 + i*50 + j), switch_list[i]+"_W1_"+j);
 				}
 			}	
 
 			for(int i=0; i<58; i++){
-			// for(int i=0; i<17; i++){
 				sty_W2[i] = CreateTensor(Parameters.Load(4 + 6*50 + 58 + 58*50 + i), switch_list[i]+"_W2");
-				// sty_W2[i] = CreateTensor(Parameters.Load(4 + 6*50 + 17 + 17*50 + i), switch_list[i]+"_W2");
 			}	
 
 			for(int i=0; i<58; i++){
-			// for(int i=0; i<17; i++){
 				sty_b[i] = CreateTensor(Parameters.Load(4 + 6*50 + 58 + 58*50 + 58 + i), switch_list[i]+"_b");
-				// sty_b[i] = CreateTensor(Parameters.Load(4 + 6*50 + 17 + 17*50 + 17 + i), switch_list[i]+"_b");
 			}	
-
-			// for(int i=8; i<58; i++){
-			// // for(int i=0; i<8; i++){
-			// 	sty_W0[i] = CreateTensor(Parameters.Load(4 + 6*50 + (i-8)), switch_list[i]+"_W0");
-			// }	
-
-			// for(int i=8; i<58; i++){
-			// // for(int i=0; i<8; i++){
-			// 	for(int j=0; j<50; j++) {
-			// 		sty_W1[i][j] = CreateTensor(Parameters.Load(4 + 6*50 + 50 + (i-8)*50 + j), switch_list[i]+"_W1_"+j);
-			// 		// sty_W1[i][j] = CreateTensor(Parameters.Load(4 + 6*50 + 8 + i*50 + j), switch_list[i]+"_W1_"+j);
-			// 	}
-			// }	
-
-			// for(int i=8; i<58; i++){
-			// // for(int i=0; i<8; i++){
-			// 	sty_W2[i] = CreateTensor(Parameters.Load(4 + 6*50 + 50 + 50*50 + (i-8)), switch_list[i]+"_W2");
-			// 	// sty_W2[i] = CreateTensor(Parameters.Load(4 + 6*50 + 8 + 8*50 + i), switch_list[i]+"_W2");
-			// }	
-
-			// for(int i=8; i<58; i++){
-			// // for(int i=0; i<8; i++){
-			// 	sty_b[i] = CreateTensor(Parameters.Load(4 + 6*50 + 50 + 50*50 + 50 + (i-8)), switch_list[i]+"_b");
-			// 	// sty_b[i] = CreateTensor(Parameters.Load(4 + 6*50 + 8 + 8*50 + 8 + i), switch_list[i]+"_b");
-			// }	
 				
 			X = CreateTensor(XDim, 1, "X");
 			H1 = CreateTensor(HDim, 1, "H1");
@@ -248,20 +180,14 @@ namespace DeepLearning {
 
 			int counter2 = 0;
 			for(int i=0; i<switch_list.Length; i++){
-				// if (style == switch_list[i]){
-				// 	if (i==3){
-				// 		ELU(Layer(Y, W1[index], b1[index], Y)); // 0 in res ad
-				// 	}
-				// 	else{
-				// 		ELU(Add(Layer(Y, W1[index], b1[index], H1), Add(Product(sty_W2[i], PointwiseProduct(sty_W1[i][index], Product(sty_W0[i], Y, H2), H2), H2), sty_b[i], H2), Y));
-				// 		// ELU(Layer(Y, W1[index], b1[index], Y)); // 0 in res ad
-				// 		// ELU(Add(Product(sty_W2[i], PointwiseProduct(sty_W1[i][index], Product(sty_W0[i], Y, H2), H2), H2), sty_b[i], Y)); // Only resad turned on
-				// 	}
-				// }
 				if (style == switch_list[i]){
 					ELU(Add(Layer(Y, W1[index], b1[index], H1), Add(Product(sty_W2[i], PointwiseProduct(sty_W1[i][index], Product(sty_W0[i], Y, H2), H2), H2), sty_b[i], H2), Y));
-					// ELU(Layer(Y, W1[index], b1[index], Y)); // 0 in res ad
-					// ELU(Add(Product(sty_W2[i], PointwiseProduct(sty_W1[i][index], Product(sty_W0[i], Y, H2), H2), H2), sty_b[i], Y)); // Only resad turned on
+					
+					// Use this line to visualise with the residaul adapters set to zero
+					// ELU(Layer(Y, W1[index], b1[index], Y)); 
+
+					// Use this line to visualize with main netwok weights set to zero
+					// ELU(Add(Product(sty_W2[i], PointwiseProduct(sty_W1[i][index], Product(sty_W0[i], Y, H2), H2), H2), sty_b[i], Y)); 
 				}
 				else {
 					counter2++;

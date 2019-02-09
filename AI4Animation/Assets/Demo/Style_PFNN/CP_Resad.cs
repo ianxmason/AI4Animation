@@ -28,7 +28,7 @@ namespace PACGRAPH_2018 {
 		private Vector3[] Forwards = new Vector3[0];
 		private Vector3[] Ups = new Vector3[0];
 
-		//Rescaling for character (cm to m)
+		//Rescaling for character
 		private float UnitScale = 2f;
 
 		//Trajectory for 60 Hz framerate
@@ -127,23 +127,13 @@ namespace PACGRAPH_2018 {
 				return;
 			}
 			
-			//Update Target Direction / Velocity
-			// TargetDirection = Vector3.Lerp(TargetDirection, Quaternion.AngleAxis(Controller.QueryTurn()*60f, Vector3.up) * Trajectory.Points[RootPointIndex].GetDirection(), TargetBlending);
+			//Update Target Direction / Velocity. Changing 40f allows the user to make wider or shallower turns.
 			TargetDirection = Vector3.Lerp(TargetDirection, Quaternion.AngleAxis(Controller.QueryTurn()*40f, Vector3.up) * Trajectory.Points[RootPointIndex].GetDirection(), TargetBlending);
 			TargetVelocity = Vector3.Lerp(TargetVelocity, (Quaternion.LookRotation(TargetDirection, Vector3.up) * Controller.QueryMove()).normalized, TargetBlending);
-			
-			//Update Gait
-			// for(int i=0; i<Controller.Gaits.Length; i++) {
-			// 	Trajectory.Points[RootPointIndex].Gaits[i] = Utility.Interpolate(Trajectory.Points[RootPointIndex].Gaits[i], Controller.Gaits[i].Query() ? 1f : 0f, GaitTransition);
-			// }
-			// //For Human Only
-			// Trajectory.Points[RootPointIndex].Gaits[0] = Utility.Interpolate(Trajectory.Points[RootPointIndex].Gaits[0], 1.0f - Mathf.Clamp(Vector3.Magnitude(TargetVelocity) / 0.1f, 0.0f, 1.0f), GaitTransition);
-			// Trajectory.Points[RootPointIndex].Gaits[1] = Mathf.Max(Trajectory.Points[RootPointIndex].Gaits[1] - Trajectory.Points[RootPointIndex].Gaits[2], 0f);
-			// //
 
 			//Update Style 
 			for(int i=0; i<Controller.Styles.Length; i++) {
-				Trajectory.Points[RootPointIndex].Styles[i] = toggles[i] ? 1f : 0f; // Utility.Interpolate(Trajectory.Points[RootPointIndex].Gaits[i], Controller.Styles[i].Query() ? 1f : 0f, GaitTransition);
+				Trajectory.Points[RootPointIndex].Styles[i] = toggles[i] ? 1f : 0f; 
                 if(toggles[i] == true){current_style=i;}
             }
             // Update Gait
@@ -151,20 +141,6 @@ namespace PACGRAPH_2018 {
 				Trajectory.Points[RootPointIndex].Gaits[i] = Utility.Interpolate(Trajectory.Points[RootPointIndex].Gaits[i], Controller.Styles[current_style].Gaits[i].Query() ? 1f : 0f, GaitTransition);
 			}
 			Trajectory.Points[RootPointIndex].Gaits[2] = Utility.Interpolate(Trajectory.Points[RootPointIndex].Gaits[2], Controller.Styles[current_style].Gaits[2].QueryFwd() ? 1f : 0f, GaitTransition); // This is for standing amount
-
-
-			/*
-			//Blend Trajectory Offset
-			Vector3 positionOffset = transform.position - Trajectory.Points[RootPointIndex].GetPosition();
-			Quaternion rotationOffset = Quaternion.Inverse(Trajectory.Points[RootPointIndex].GetRotation()) * transform.rotation;
-			Trajectory.Points[RootPointIndex].SetPosition(Trajectory.Points[RootPointIndex].GetPosition() + positionOffset);
-			Trajectory.Points[RootPointIndex].SetDirection(rotationOffset * Trajectory.Points[RootPointIndex].GetDirection());
-
-			for(int i=RootPointIndex; i<Trajectory.Points.Length; i++) {
-				float factor = 1f - (i - RootPointIndex)/(RootPointIndex - 1f);
-				Trajectory.Points[i].SetPosition(Trajectory.Points[i].GetPosition() + factor*positionOffset);
-			}
-			*/
 
 			//Predict Future Trajectory
 			Vector3[] trajectory_positions_blend = new Vector3[Trajectory.Points.Length];
@@ -234,26 +210,6 @@ namespace PACGRAPH_2018 {
 					NN.Model.SetInput(PointSamples*3 + i, dir.z);
 				}
 
-				// //Input Trajectory Gaits
-				// for (int i=0; i<PointSamples; i++) {
-				// 	for(int j=0; j<Trajectory.Points[i*PointDensity].Gaits.Length; j++) {
-				// 		NN.Model.SetInput(PointSamples*(4+j) + i, Trajectory.Points[i*PointDensity].Gaits[j]);
-				// 	}
-				// 	// //FOR HUMAN ONLY
-				// 	// NN.Model.SetInput(PointSamples*8 + i, Trajectory.Points[i*PointDensity].GetSlope());
-				// 	// //
-				// }
-
-				// // Input Trajectory Styles
-				// for (int i=0; i<PointSamples; i++) {
-				// 	for(int j=0; j<Trajectory.Points[i*PointDensity].Styles.Length; j++) {
-				// 		NN.Model.SetInput(PointSamples*(6+j) + i, Trajectory.Points[i*PointDensity].Styles[j]);
-				// 	}
-				// 	// //FOR HUMAN ONLY
-				// 	// NN.Model.SetInput(PointSamples*8 + i, Trajectory.Points[i*PointDensity].GetSlope());
-				// 	// //
-				// }
-
 				//Input Previous Bone Positions / Velocities
 				for(int i=0; i<Joints.Length; i++) {
 					int o = 4*PointSamples;
@@ -285,7 +241,7 @@ namespace PACGRAPH_2018 {
 					for( int i = 0; i < time.Length; i++) {
 						sum += time[i];
 						}
-					Debug.Log(sum/time.Length);
+					// Debug.Log(sum/time.Length);  // Uncomment this to print the time for the update loop in the console
 					}
 
 				//Update Past Trajectory
@@ -301,11 +257,10 @@ namespace PACGRAPH_2018 {
 				}
 
 				//Update Current Trajectory
-
+				// rest defines if the character moves or not and by how much.
 				// float rest = 1.0f;  //Mathf.Pow(1.0f-Trajectory.Points[RootPointIndex].Gaits[0], 0.25f);
 				float rest = Mathf.Pow(1.0f-Trajectory.Points[RootPointIndex].Gaits[2], 0.25f);
 				Trajectory.Points[RootPointIndex].SetPosition((rest * new Vector3(NN.Model.GetOutput(0) / UnitScale, 0f, NN.Model.GetOutput(1) / UnitScale)).GetRelativePositionFrom(currentRoot));
-				// Trajectory.Points[RootPointIndex].SetDirection(Quaternion.AngleAxis(rest * Mathf.Rad2Deg * (-NN.Model.GetOutput(2)), Vector3.up) * Trajectory.Points[RootPointIndex].GetDirection());
 				Trajectory.Points[RootPointIndex].SetDirection(Quaternion.AngleAxis(rest * (NN.Model.GetOutput(2)), Vector3.up) * Trajectory.Points[RootPointIndex].GetDirection());
 				Trajectory.Points[RootPointIndex].Postprocess();
 				Matrix4x4 nextRoot = Trajectory.Points[RootPointIndex].GetTransformation();
@@ -360,7 +315,6 @@ namespace PACGRAPH_2018 {
 				
 				//Compute Posture
 				Vector3[] positions = new Vector3[Joints.Length];
-				Quaternion[] rotations = new Quaternion[Joints.Length];
 				int opos = 4 + 4*RootSampleIndex + Joints.Length*3*0;
 				int ovel = 4 + 4*RootSampleIndex + Joints.Length*3*1;
 				int orot = 4 + 4*RootSampleIndex + Joints.Length*3*2;
@@ -511,6 +465,7 @@ namespace PACGRAPH_2018 {
 			}
 			Character.Draw();
 
+			// For debugging - shows joint velocities
 			// if(Application.isPlaying) {
 			// 	UltiDraw.Begin();
 			// 	for(int i=0; i<Joints.Length; i++) {

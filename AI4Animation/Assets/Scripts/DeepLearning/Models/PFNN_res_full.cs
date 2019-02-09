@@ -40,7 +40,7 @@ namespace DeepLearning {
 			}  
 			file.Close(); 
 
-			// Due to inconsistencies we need this manual correction
+			// Due to naming inconsistencies we need this manual correction
 			style_list[0] = "/ang";
 			style_list[1] = "/chi";
 			style_list[2] = "/dep";
@@ -146,15 +146,6 @@ namespace DeepLearning {
 					b[i][j] = CreateTensor(Parameters.Load(4 + 6*50 + 6*50 + (i-20)*50 + j), switch_list[i]+"_b_"+j); 
 				}
 			}	
-
-			// style_W = new Tensor[50];
-			// style_b = new Tensor[50];
-
-			// for(int i=0; i<50; i++) {
-			// 	style_W[i] = CreateTensor(Parameters.Load(4 + 6*50 + 4*50 + i), "style_W"+i);	// 4*50 loads neutral as default
-			// 	style_b[i] = CreateTensor(Parameters.Load(4 + 6*50 + 65*50 + 4*50 + i), "style_b"+i);
-
-			// }
 				
 			X = CreateTensor(XDim, 1, "X");
 			H1 = CreateTensor(HDim, 1, "H1");
@@ -163,28 +154,6 @@ namespace DeepLearning {
 
 			Phase = 0f;
 		}
-
-		// public void LoadStyle(string style){
-		// 	int counter2 = 0;
-		// 	for(int i=0; i<switch_list.Length; i++){
-		// 		if (style == switch_list[i]){
-        //             for(int j=0; j<50; j++) {
-		// 				style_W[j].Delete();
-		// 				style_b[j].Delete();
-		// 				style_W[j] = CreateTensor(Parameters.Load(4 + 6*50 + i*50 + j), "style_W"+j);
-		// 				style_b[j] = CreateTensor(Parameters.Load(4 + 6*50 + 65*50 + i*50 + j), "style_b"+j);
-
-		// 			}
-		// 		}
-		// 		else {
-		// 			counter2++;
-		// 		}
-		// 	}
-		// 	if (counter2 ==switch_list.Length){
-		// 		Debug.Log("No valid style selected!");
-		// 	}
-			
-		// }
 
 		public override void SetInput(int index, float value) {
 			X.SetValue(index, 0, value);
@@ -207,8 +176,6 @@ namespace DeepLearning {
 			int index = (int)((Phase / (2f*M_PI)) * 50f);
 			
 			ELU(Layer(Y, W0[index], b0[index], Y));
-
-			// ELU(Add(Layer(Y, W1[index], b1[index], H1), Layer(Y, style_W[index], style_b[index], H2), Y));
 
 			int counter2 = 0;
 			for(int i=0; i<switch_list.Length; i++){

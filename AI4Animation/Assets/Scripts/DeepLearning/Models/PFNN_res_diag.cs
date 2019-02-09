@@ -40,7 +40,7 @@ namespace DeepLearning {
 			}  
 			file.Close(); 
 
-			// Due to inconsistencies we need this manual correction
+			// Due to naming inconsistencies we need this manual correction
 			style_list[0] = "/ang";
 			style_list[1] = "/chi";
 			style_list[2] = "/dep";
@@ -77,7 +77,6 @@ namespace DeepLearning {
 
 
 			for(int i=0; i<58; i++){
-			// for(int i=0; i<45; i++){ // Currently not all trained
 				for(int j=0; j<50; j++) {
 					if(i<8){Parameters.Store(Folder+style_list[i]+"_W_"+j.ToString("D3")+".bin", HDim, 1);}
 					else{Parameters.Store(Folder+style_list[i]+"_W0_"+j.ToString("D3")+".bin", HDim, 1);}
@@ -85,7 +84,6 @@ namespace DeepLearning {
 			}	
 
 			for(int i=0; i<58; i++){
-			// for(int i=0; i<45; i++){ 
 				for(int j=0; j<50; j++) {
 					Parameters.Store(Folder+style_list[i]+"_b_"+j.ToString("D3")+".bin", HDim, 1);
 				}
@@ -130,17 +128,14 @@ namespace DeepLearning {
 			}
 
 			for(int i=0; i<58; i++){
-			// for(int i=0; i<45; i++){ 
 				for(int j=0; j<50; j++) {
 					W[i][j] = CreateTensor(Parameters.Load(4 + 6*50 + i*50 + j), switch_list[i]+"_W_"+j);
 				}
 			}	
 
 			for(int i=0; i<58; i++){
-			// for(int i=0; i<45; i++){ 
 				for(int j=0; j<50; j++) {
 					b[i][j] = CreateTensor(Parameters.Load(4 + 6*50 + 58*50 + i*50 + j), switch_list[i]+"_b_"+j);
-					//b[i][j] = CreateTensor(Parameters.Load(4 + 6*50 + 45*50 + i*50 + j), switch_list[i]+"_b_"+j);
 				}
 			}	
 				

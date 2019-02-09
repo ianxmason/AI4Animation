@@ -1,7 +1,3 @@
-""" 
-Training the main pfnn using residual adapters with diagonal weights.
-"""
-
 import sys
 import numpy as np
 import theano
@@ -16,6 +12,10 @@ from DropoutLayer import DropoutLayer
 from ActivationLayer import ActivationLayer
 from AdamTrainerStyle import AdamTrainer
 from DiagLayer import DiagLayer
+
+""" 
+Training the main pfnn using residual adapters with diagonal weights.
+"""
 
 mname='Diag'
 rng = np.random.RandomState(23456)

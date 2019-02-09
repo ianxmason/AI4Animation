@@ -1,7 +1,3 @@
-""" 
-Training the main pfnn with residual adapters with a full matrix of weights for each style.
-"""
-
 import sys
 import numpy as np
 import theano
@@ -15,6 +11,10 @@ from BiasLayer import BiasLayer
 from DropoutLayer import DropoutLayer
 from ActivationLayer import ActivationLayer
 from AdamTrainerStyle import AdamTrainer
+
+""" 
+Training the main pfnn with residual adapters with a full matrix of weights for each style.
+"""
 
 mname='Full'
 rng = np.random.RandomState(23456)

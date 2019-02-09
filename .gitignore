@@ -6,7 +6,6 @@ AI4Animation/[Bb]uilds/
 AI4Animation/Assets/AssetStoreTools*
 PATCH/
 Models/Data/*
-Models/Parameters/*
 
 # Visual Studio 2015 cache directory
 AI4Animation/.vscode/

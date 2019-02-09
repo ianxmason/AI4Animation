@@ -1,7 +1,3 @@
-""" 
-Few-shot training of the residual adapters decomposed using CP decomposition and with the central diagonal tensor of size 30x30.
-"""
-
 import sys
 import numpy as np
 import theano
@@ -17,6 +13,10 @@ from DropoutLayer import DropoutLayer
 from ActivationLayer import ActivationLayer
 from AdamTrainer import AdamTrainer
 from DiagLayer import DiagLayer
+
+""" 
+Few-shot training of the residual adapters decomposed using CP decomposition and with the central diagonal tensor of size 30x30.
+"""
 
 mname='CP'
 rng = np.random.RandomState(23456)

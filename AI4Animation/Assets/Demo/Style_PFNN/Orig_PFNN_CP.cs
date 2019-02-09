@@ -298,7 +298,7 @@ namespace SIGGRAPH_2017 {
 				
 				//Compute Posture
 				Vector3[] positions = new Vector3[Joints.Length];
-				Quaternion[] rotations = new Quaternion[Joints.Length];
+				// Quaternion[] rotations = new Quaternion[Joints.Length];
 				int opos = 4 + 4*RootSampleIndex + Joints.Length*3*0;
 				int ovel = 4 + 4*RootSampleIndex + Joints.Length*3*1;
 				int orot = 4 + 4*RootSampleIndex + Joints.Length*3*2;

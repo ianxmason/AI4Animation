@@ -309,7 +309,7 @@ Transform:
   m_Father: {fileID: 1326475502}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &350044986
+--- !u!114 &322900701
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -321,11 +321,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9124bff879bd85df490d5880b7a888ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Folder: Assets/Project/Parameters/
+  Folder: Assets/Demo/Style_PFNN/Parameters/CP
   Parameters: {fileID: 0}
-  XDim: 0
-  HDim: 0
-  YDim: 0
+  XDim: 234
+  HDim: 512
+  YDim: 400
 --- !u!1 &469908977
 GameObject:
   m_ObjectHideFlags: 0
@@ -799,7 +799,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 906300034}
-  - component: {fileID: 906300035}
+  - component: {fileID: 906300033}
   m_Layer: 0
   m_Name: Skeleton
   m_TagString: Untagged
@@ -807,22 +807,7 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &906300034
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 906300032}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 1416828982}
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &906300035
+--- !u!114 &906300033
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -839,7 +824,38 @@ MonoBehaviour:
   GaitTransition: 0.25
   TrajectoryCorrection: 1
   Root: {fileID: 906300034}
-  Joints: []
+  Joints:
+  - {fileID: 1416828982}
+  - {fileID: 78899348}
+  - {fileID: 1068525804}
+  - {fileID: 2030757186}
+  - {fileID: 1737945281}
+  - {fileID: 906077986}
+  - {fileID: 483084006}
+  - {fileID: 1423530857}
+  - {fileID: 150677431}
+  - {fileID: 1026751072}
+  - {fileID: 1290835292}
+  - {fileID: 2095317843}
+  - {fileID: 1242562170}
+  - {fileID: 945372512}
+  - {fileID: 1531800889}
+  - {fileID: 735293892}
+  - {fileID: 1181128798}
+  - {fileID: 1980939427}
+  - {fileID: 1825802167}
+  - {fileID: 1624355132}
+  - {fileID: 594704084}
+  - {fileID: 1031071220}
+  - {fileID: 1911532580}
+  - {fileID: 733809574}
+  - {fileID: 1526242307}
+  - {fileID: 1326475502}
+  - {fileID: 219865676}
+  - {fileID: 1157019713}
+  - {fileID: 1513744526}
+  - {fileID: 1439884119}
+  - {fileID: 975075187}
   Controller:
     Inspect: 0
     MoveForward: 119
@@ -849,35 +865,1000 @@ MonoBehaviour:
     TurnLeft: 113
     TurnRight: 101
     Gaits: []
-    Styles: []
+    Styles:
+    - Name: Angry
+      Gaits:
+      - Name: Walk
+        Bias: 2.5
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 5
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: Childlike
+      Gaits:
+      - Name: Walk
+        Bias: 1
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 4
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: Depressed
+      Gaits:
+      - Name: Walk
+        Bias: 0.5
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 1.5
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: Neutral
+      Gaits:
+      - Name: Walk
+        Bias: 0.8
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 2.5
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: Old
+      Gaits:
+      - Name: Walk
+        Bias: 0.25
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 1
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: Proud
+      Gaits:
+      - Name: Walk
+        Bias: 0.75
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 2.5
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: Sexy
+      Gaits:
+      - Name: Walk
+        Bias: 0.5
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 1.75
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: Strutting
+      Gaits:
+      - Name: Walk
+        Bias: 1
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 2
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: Balance
+      Gaits:
+      - Name: Walk
+        Bias: 1
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 2
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: BentForward
+      Gaits:
+      - Name: Walk
+        Bias: 0.6
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 3
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: BentKnees
+      Gaits:
+      - Name: Walk
+        Bias: 0.5
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 2.5
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: Bouncy
+      Gaits:
+      - Name: Walk
+        Bias: 1
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 2.5
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: Cat
+      Gaits:
+      - Name: Walk
+        Bias: 0.5
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 2
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: Chicken
+      Gaits:
+      - Name: Walk
+        Bias: 2.5
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 4
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: Cool
+      Gaits:
+      - Name: Walk
+        Bias: 0.8
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 3
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: Crossover
+      Gaits:
+      - Name: Walk
+        Bias: 0.75
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 1.5
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: Crouched
+      Gaits:
+      - Name: Walk
+        Bias: 1.25
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 3
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: Dance3
+      Gaits:
+      - Name: Walk
+        Bias: 0.5
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 1
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: Dinosaur
+      Gaits:
+      - Name: Walk
+        Bias: 0.6
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 2.5
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: DragLeg
+      Gaits:
+      - Name: Walk
+        Bias: 0.5
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 1.5
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: Drunk
+      Gaits:
+      - Name: Walk
+        Bias: 0.75
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 2
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: DuckFoot
+      Gaits:
+      - Name: Walk
+        Bias: 0.25
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 1.25
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: Elated
+      Gaits:
+      - Name: Walk
+        Bias: 0.75
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 2
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: Frankenstein
+      Gaits:
+      - Name: Walk
+        Bias: 0.5
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 1
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: Gangly
+      Gaits:
+      - Name: Walk
+        Bias: 1
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 3
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: Gedanbarai
+      Gaits:
+      - Name: Walk
+        Bias: 1
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 2.5
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: Graceful
+      Gaits:
+      - Name: Walk
+        Bias: 1
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 2.5
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: Heavyset
+      Gaits:
+      - Name: Walk
+        Bias: 0.25
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 1
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: Heiansyodan
+      Gaits:
+      - Name: Walk
+        Bias: 1
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 2.5
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: Hobble
+      Gaits:
+      - Name: Walk
+        Bias: 0.5
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 3.5
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: HurtLeg
+      Gaits:
+      - Name: Walk
+        Bias: 0.75
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 2
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: Jaunty
+      Gaits:
+      - Name: Walk
+        Bias: 0.5
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 2.5
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: Joy
+      Gaits:
+      - Name: Walk
+        Bias: 1.5
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 2.5
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: LeanRight
+      Gaits:
+      - Name: Walk
+        Bias: 1
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 3
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: LeftHop
+      Gaits:
+      - Name: Walk
+        Bias: 1
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 3
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: LegsApart
+      Gaits:
+      - Name: Walk
+        Bias: 0.25
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 2
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: Mantis
+      Gaits:
+      - Name: Walk
+        Bias: 1.5
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 3.5
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: March
+      Gaits:
+      - Name: Walk
+        Bias: 0.75
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 2.5
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: Mawashigeri
+      Gaits:
+      - Name: Walk
+        Bias: 1
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 2.5
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: OnToesBentForward
+      Gaits:
+      - Name: Walk
+        Bias: 1
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 3
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: OnToesCrouched
+      Gaits:
+      - Name: Walk
+        Bias: 0.25
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 2
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: PainfulLeftknee
+      Gaits:
+      - Name: Walk
+        Bias: 1.25
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 3
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: Penguin
+      Gaits:
+      - Name: Walk
+        Bias: 1
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 2
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: PigeonToed
+      Gaits:
+      - Name: Walk
+        Bias: 0.75
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 2.5
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: PrarieDog
+      Gaits:
+      - Name: Walk
+        Bias: 2.5
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 4
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: Quail
+      Gaits:
+      - Name: Walk
+        Bias: 1
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 3
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: Roadrunner
+      Gaits:
+      - Name: Walk
+        Bias: 0.75
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 3
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: Rushed
+      Gaits:
+      - Name: Walk
+        Bias: 1
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 2.5
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: Sneaky
+      Gaits:
+      - Name: Walk
+        Bias: 0.75
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 2
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: Squirrel
+      Gaits:
+      - Name: Walk
+        Bias: 2.5
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 4
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: Stern
+      Gaits:
+      - Name: Walk
+        Bias: 0.75
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 3
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: Stuff
+      Gaits:
+      - Name: Walk
+        Bias: 0.75
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 2.5
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: SwingShoulders
+      Gaits:
+      - Name: Walk
+        Bias: 1
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 3
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: WildArms
+      Gaits:
+      - Name: Walk
+        Bias: 1.5
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 2.5
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: WildLegs
+      Gaits:
+      - Name: Walk
+        Bias: 0.3
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 2.5
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: WoundedLeg
+      Gaits:
+      - Name: Walk
+        Bias: 0.75
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 2
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: Yokogeri
+      Gaits:
+      - Name: Walk
+        Bias: 1
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 2.5
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
+    - Name: Zombie
+      Gaits:
+      - Name: Walk
+        Bias: 0.5
+        Keys: 77000000610000007300000064000000710000006500000030010000
+        Negations: 00000000000001
+        Multipliers: []
+      - Name: Run
+        Bias: 2.5
+        Keys: 30010000
+        Negations: 00
+        Multipliers: []
+      - Name: Stand
+        Bias: 0
+        Keys: 77000000
+        Negations: 01
+        Multipliers: []
   Character:
     Inspect: 0
     Hierarchy:
-    - Name: Skeleton
+    - Name: J1
       Index: 0
       Parent: -1
-      Childs: 01000000
-      Transformation:
-        e00: 1
-        e01: 0
-        e02: 0
-        e03: 0
-        e10: 0
-        e11: 1
-        e12: 0
-        e13: 0
-        e20: 0
-        e21: 0
-        e22: 1
-        e23: 0
-        e30: 0
-        e31: 0
-        e32: 0
-        e33: 1
-    - Name: J1
-      Index: 1
-      Parent: 0
-      Childs: 02000000070000000c000000
+      Childs: 01000000060000000b000000
       Transformation:
         e00: 1
         e01: 0
@@ -896,9 +1877,9 @@ MonoBehaviour:
         e32: 0
         e33: 1
     - Name: J2
-      Index: 2
-      Parent: 1
-      Childs: 03000000
+      Index: 1
+      Parent: 0
+      Childs: 02000000
       Transformation:
         e00: 1
         e01: 0
@@ -917,9 +1898,9 @@ MonoBehaviour:
         e32: 0
         e33: 1
     - Name: J3
-      Index: 3
-      Parent: 2
-      Childs: 04000000
+      Index: 2
+      Parent: 1
+      Childs: 03000000
       Transformation:
         e00: 1
         e01: 0
@@ -938,9 +1919,9 @@ MonoBehaviour:
         e32: 0
         e33: 1
     - Name: J4
-      Index: 4
-      Parent: 3
-      Childs: 05000000
+      Index: 3
+      Parent: 2
+      Childs: 04000000
       Transformation:
         e00: 1
         e01: 0
@@ -959,9 +1940,9 @@ MonoBehaviour:
         e32: 0
         e33: 1
     - Name: J5
-      Index: 5
-      Parent: 4
-      Childs: 06000000
+      Index: 4
+      Parent: 3
+      Childs: 05000000
       Transformation:
         e00: 1
         e01: 0
@@ -980,8 +1961,8 @@ MonoBehaviour:
         e32: 0
         e33: 1
     - Name: J6
-      Index: 6
-      Parent: 5
+      Index: 5
+      Parent: 4
       Childs: 
       Transformation:
         e00: 1
@@ -1001,9 +1982,9 @@ MonoBehaviour:
         e32: 0
         e33: 1
     - Name: J7
-      Index: 7
-      Parent: 1
-      Childs: 08000000
+      Index: 6
+      Parent: 0
+      Childs: 07000000
       Transformation:
         e00: 1
         e01: 0
@@ -1022,9 +2003,9 @@ MonoBehaviour:
         e32: 0
         e33: 1
     - Name: J8
-      Index: 8
-      Parent: 7
-      Childs: 09000000
+      Index: 7
+      Parent: 6
+      Childs: 08000000
       Transformation:
         e00: 1
         e01: 0
@@ -1043,9 +2024,9 @@ MonoBehaviour:
         e32: 0
         e33: 1
     - Name: J9
-      Index: 9
-      Parent: 8
-      Childs: 0a000000
+      Index: 8
+      Parent: 7
+      Childs: 09000000
       Transformation:
         e00: 1
         e01: 0
@@ -1064,9 +2045,9 @@ MonoBehaviour:
         e32: 0
         e33: 1
     - Name: J10
-      Index: 10
-      Parent: 9
-      Childs: 0b000000
+      Index: 9
+      Parent: 8
+      Childs: 0a000000
       Transformation:
         e00: 1
         e01: 0
@@ -1085,8 +2066,8 @@ MonoBehaviour:
         e32: 0
         e33: 1
     - Name: J11
-      Index: 11
-      Parent: 10
+      Index: 10
+      Parent: 9
       Childs: 
       Transformation:
         e00: 1
@@ -1106,9 +2087,9 @@ MonoBehaviour:
         e32: 0
         e33: 1
     - Name: J12
-      Index: 12
-      Parent: 1
-      Childs: 0d000000
+      Index: 11
+      Parent: 0
+      Childs: 0c000000
       Transformation:
         e00: 1
         e01: 0
@@ -1127,9 +2108,9 @@ MonoBehaviour:
         e32: 0
         e33: 1
     - Name: J13
-      Index: 13
-      Parent: 12
-      Childs: 0e000000
+      Index: 12
+      Parent: 11
+      Childs: 0d000000
       Transformation:
         e00: 1
         e01: 0
@@ -1148,9 +2129,9 @@ MonoBehaviour:
         e32: 0
         e33: 1
     - Name: J14
-      Index: 14
-      Parent: 13
-      Childs: 0f0000001200000019000000
+      Index: 13
+      Parent: 12
+      Childs: 0e0000001100000018000000
       Transformation:
         e00: 1
         e01: 0
@@ -1169,9 +2150,9 @@ MonoBehaviour:
         e32: 0
         e33: 1
     - Name: J15
-      Index: 15
-      Parent: 14
-      Childs: 10000000
+      Index: 14
+      Parent: 13
+      Childs: 0f000000
       Transformation:
         e00: 1
         e01: 0
@@ -1190,9 +2171,9 @@ MonoBehaviour:
         e32: 0
         e33: 1
     - Name: J16
-      Index: 16
-      Parent: 15
-      Childs: 11000000
+      Index: 15
+      Parent: 14
+      Childs: 10000000
       Transformation:
         e00: 1
         e01: 0
@@ -1211,8 +2192,8 @@ MonoBehaviour:
         e32: 0
         e33: 1
     - Name: J17
-      Index: 17
-      Parent: 16
+      Index: 16
+      Parent: 15
       Childs: 
       Transformation:
         e00: 1
@@ -1232,9 +2213,9 @@ MonoBehaviour:
         e32: 0
         e33: 1
     - Name: J18
-      Index: 18
-      Parent: 14
-      Childs: 13000000
+      Index: 17
+      Parent: 13
+      Childs: 12000000
       Transformation:
         e00: 1
         e01: 0
@@ -1253,9 +2234,9 @@ MonoBehaviour:
         e32: 0
         e33: 1
     - Name: J19
-      Index: 19
-      Parent: 18
-      Childs: 14000000
+      Index: 18
+      Parent: 17
+      Childs: 13000000
       Transformation:
         e00: 1
         e01: 0
@@ -1274,9 +2255,9 @@ MonoBehaviour:
         e32: 0
         e33: 1
     - Name: J20
-      Index: 20
-      Parent: 19
-      Childs: 15000000
+      Index: 19
+      Parent: 18
+      Childs: 14000000
       Transformation:
         e00: 1
         e01: 0
@@ -1295,9 +2276,9 @@ MonoBehaviour:
         e32: 0
         e33: 1
     - Name: J21
-      Index: 21
-      Parent: 20
-      Childs: 1600000018000000
+      Index: 20
+      Parent: 19
+      Childs: 1500000017000000
       Transformation:
         e00: 1
         e01: 0
@@ -1316,9 +2297,9 @@ MonoBehaviour:
         e32: 0
         e33: 1
     - Name: J22
-      Index: 22
-      Parent: 21
-      Childs: 17000000
+      Index: 21
+      Parent: 20
+      Childs: 16000000
       Transformation:
         e00: 1
         e01: 0
@@ -1337,8 +2318,8 @@ MonoBehaviour:
         e32: 0
         e33: 1
     - Name: J23
-      Index: 23
-      Parent: 22
+      Index: 22
+      Parent: 21
       Childs: 
       Transformation:
         e00: 1
@@ -1358,8 +2339,8 @@ MonoBehaviour:
         e32: 0
         e33: 1
     - Name: J24
-      Index: 24
-      Parent: 21
+      Index: 23
+      Parent: 20
       Childs: 
       Transformation:
         e00: 1
@@ -1379,9 +2360,9 @@ MonoBehaviour:
         e32: 0
         e33: 1
     - Name: J25
-      Index: 25
-      Parent: 14
-      Childs: 1a000000
+      Index: 24
+      Parent: 13
+      Childs: 19000000
       Transformation:
         e00: 1
         e01: 0
@@ -1400,9 +2381,9 @@ MonoBehaviour:
         e32: 0
         e33: 1
     - Name: J26
-      Index: 26
-      Parent: 25
-      Childs: 1b000000
+      Index: 25
+      Parent: 24
+      Childs: 1a000000
       Transformation:
         e00: 1
         e01: 0
@@ -1421,9 +2402,9 @@ MonoBehaviour:
         e32: 0
         e33: 1
     - Name: J27
-      Index: 27
-      Parent: 26
-      Childs: 1c000000
+      Index: 26
+      Parent: 25
+      Childs: 1b000000
       Transformation:
         e00: 1
         e01: 0
@@ -1442,9 +2423,9 @@ MonoBehaviour:
         e32: 0
         e33: 1
     - Name: J28
-      Index: 28
-      Parent: 27
-      Childs: 1d0000001f000000
+      Index: 27
+      Parent: 26
+      Childs: 1c0000001e000000
       Transformation:
         e00: 1
         e01: 0
@@ -1463,9 +2444,9 @@ MonoBehaviour:
         e32: 0
         e33: 1
     - Name: J29
-      Index: 29
-      Parent: 28
-      Childs: 1e000000
+      Index: 28
+      Parent: 27
+      Childs: 1d000000
       Transformation:
         e00: 1
         e01: 0
@@ -1484,8 +2465,8 @@ MonoBehaviour:
         e32: 0
         e33: 1
     - Name: J30
-      Index: 30
-      Parent: 29
+      Index: 29
+      Parent: 28
       Childs: 
       Transformation:
         e00: 1
@@ -1505,8 +2486,8 @@ MonoBehaviour:
         e32: 0
         e33: 1
     - Name: J31
-      Index: 31
-      Parent: 28
+      Index: 30
+      Parent: 27
       Childs: 
       Transformation:
         e00: 1
@@ -1533,7 +2514,7 @@ MonoBehaviour:
   NN:
     Inspect: 1
     Type: 4
-    Model: {fileID: 350044986}
+    Model: {fileID: 322900701}
   style_count:
   - 
   - 
@@ -2653,6 +3634,21 @@ MonoBehaviour:
   - 0
   - 0
   - 0
+--- !u!4 &906300034
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 906300032}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1416828982}
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &945372511
 GameObject:
   m_ObjectHideFlags: 0

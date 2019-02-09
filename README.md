@@ -24,23 +24,23 @@ Then train the main network: `train_cp.py` trains the main network with CP decom
 
 Followed by the the fewshot network: `train_cp_fewshot.py`
 
-We also provide code for training comparisons, but not pre-trained parameters
-`train_diag.py & train_diag_fewshot.py` - trains with the residual adpaters having only diagonal weights
-`train_full.py & train_full_fewshot.py` - trains with full weight matrices for the residual adapters
+We also provide code for training comparisons, but not pre-trained parameters.
+- `train_diag.py & train_diag_fewshot.py` train with the residual adpaters having only diagonal weights
+- `train_full.py & train_full_fewshot.py` train with full weight matrices for the residual adapters
 
 ## Running the Demo
 <img src ="https://github.com/ianxmason/Fewshot_Learning_of_Homogeneous_Human_Locomotion_Styles/blob/master/Media/examples.png" width="100%">
 
 The demo is built in the Unity game engine, which can be downloaded for linux <a href="https://forum.unity.com/threads/unity-on-linux-release-notes-and-known-issues.350256/" target="_blank">here</a>. 
 
-To get the demo running follow the following procedure:
+To get the demo running use the following procedure:
 - Copy the parametes from `Fewshot_Learning_of_Homogeneous_Human_Locomotion_Styles/Models/Parameters/CP` to `Assets/Demo/Style_PFNN/Parameters/CP`
 - Open the *Demo_Scene,* select the skeleton in the scene and attach the correct component: `CP_Resad.`
-- Open the *Character* window in the component and remove the root projection bone by deselecting the first joint
+- Open the *Character* window in the attached component and remove the root projection bone by deselecting the first joint
 - Open the *Animation* window and click *Auto Detect.*
 - Open the *Controller* window and minimise it again to initialise the character controller (you may have to do this twice if you get an error in the Unity console)
 - Open the *Neural Network* window. Select the correct network type from the drop down menu: *PFNN_res_cp.*
-- Set the network layer dimensionality correctly: *XDim = 234, Hdim = 512, Ydim = 400.*
+- Set the network layer dimensionalities correctly: *XDim = 234, Hdim = 512, Ydim = 400.*
 - Set the Folder to `Assets/Demo/Style_PFNN/Parameters/CP` and press the *Store Parameters* button.
 - Either play the demo in the editor, or build the demo if you require a higher framerate.
 
@@ -49,14 +49,14 @@ Note that if using the residual adapters with a full matrix of weights, in the s
 ## Further Work
 In our paper we describe how our solution is not highly engineered and we suspect the results can be qualitatively improved with further engineering such as finding the optimal size of CP decomposition tensors or the ideal point for early stopping. 
 
-When running the demo you may notice several issues that could be improved with further work including but not limited to:
+When running the demo you may notice several issues that could be improved with further work, including but not limited to:
 - For some styles there is a small jump every time the phase cycles
 - Learning to run given only a small amount of walking data is hard
 - Some of the styles don't work very well, notably the martial arts and other styles than differ highly from standard locomotion
 - Sometimes the character is not as responsive to user control as we would like
 
 ## License & Citation
-This code is licensed under the MIT License. If you wish to use this code or data for your own research please cite the following:
+If you wish to use this code or data for your own research please cite the following:
 ```
 @article{mason2018style,
 	title={Few-shot learning of homogeneous human locomotion styles},
@@ -70,3 +70,5 @@ This code is licensed under the MIT License. If you wish to use this code or dat
 }
 ```
 
+The original contributions in this code are licensed under the MIT License. Please note however, the AI4Animation Unity demo contains the following copyright information:
+> This code implementation is only for research or education purposes, and (especially the learned data) not freely available for commercial use or redistribution. The intellectual property and code implementation belongs to the University of Edinburgh. Licensing is possible if you want to apply this research for commercial use. 
